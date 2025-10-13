@@ -10,8 +10,7 @@
     <style>
         /* ========================================
         Original Desktop Styles (with minor tweaks)
-        ========================================
-        */
+        ======================================== */
 
         /* Global Styles */
         :root {
@@ -133,23 +132,31 @@
         .page-content { display: none; }
         .page-content.active-page { display: block; }
 
-        /* Home Page Styles */
+        /* Home Page Styles (Hero, Chips, Feature Grid) */
         #home img.full-width {
             width: 100%;
             height: auto;
             margin-bottom: 20px;
         }
 
-        .sidebar-section { margin-top: 30px; }
-        .sidebar-section ul {
-            list-style-type: none;
-            padding-left: 0;
-            font-size: 14px;
+        .feature-chips {
+            display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0 6px 0;
         }
-        .sidebar-section li {
-            margin-bottom: 15px;
-            line-height: 1.4;
+        .chip {
+            display: inline-block; padding: 6px 10px; border-radius: 999px;
+            background: var(--uc-blue); color: #fff; font-size: 13px; letter-spacing: .2px;
         }
+        .chip.alt { background: var(--uc-gold); color: #000; }
+
+        .feature-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 16px;
+        }
+        .feature-card {
+            border: 1px solid var(--light-gray); border-radius: 10px; padding: 16px;
+            background: #fff;
+        }
+        .feature-card h3 { margin: 0 0 8px; font-size: 18px; }
+        .feature-card p { margin: 0; text-align: justify; }
 
         /* Research Page Styles */
         .research-project {
@@ -247,19 +254,37 @@
             margin-bottom: 12px;
         }
 
+        /* ---------- Reveal-on-scroll animations ---------- */
+        .reveal { opacity: 0; transform: translateY(16px); transition: opacity .7s ease, transform .7s ease; }
+        .reveal.in { opacity: 1; transform: none; }
+        .reveal.fade-up { transform: translateY(18px); }
+        .reveal.fade-in { transform: none; }
+        .reveal.scale-in { transform: scale(.96); }
+
+        @media (prefers-reduced-motion: reduce) {
+          .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+        }
+
+        .reveal[data-delay] { transition-delay: var(--reveal-delay, 0ms); }
+
+        /* ---------- Tiny icon styling ---------- */
+        .icon {
+          width: 20px; height: 20px; vertical-align: -3px; margin-right: 8px;
+          fill: var(--uc-blue);
+        }
+        .feature-card h3 .icon { width: 18px; height: 18px; }
+
         /* ========================================
         NEW "SPICY" MOBILE STYLES 🌶️
-        ========================================
-        */
+        ======================================== */
         @media (max-width: 768px) {
             :root {
-                /* Spicy Color Palette */
                 --bg-color: #121212;
                 --surface-color: #1E1E1E;
                 --primary-text: #E0E0E0;
                 --secondary-text: #A0A0A0;
-                --accent-color: #FF4500; /* OrangeRed */
-                --accent-hover: #FF6347; /* Tomato */
+                --accent-color: #FF4500;
+                --accent-hover: #FF6347;
             }
 
             body {
@@ -289,23 +314,20 @@
             a { color: var(--accent-color); transition: color 0.3s ease; }
             a:hover { color: var(--accent-hover); text-decoration: none; }
 
-            /* Header and Mobile Menu */
             .site-header {
                 align-items: center;
                 border-bottom: 2px solid var(--accent-color);
             }
-            .site-header h1 {
-                font-size: 1.2rem; /* Compact header title */
-            }
-            .site-header .pi-info { display: none; } /* Hide PI info on mobile header for space */
-            
+            .site-header h1 { font-size: 1.2rem; }
+            .site-header .pi-info { display: none; }
+
             .menu-toggle {
                 display: block;
                 background: none;
                 border: none;
                 cursor: pointer;
                 padding: 0;
-                z-index: 1001; /* Ensure it's above other content */
+                z-index: 1001;
             }
             .menu-toggle .hamburger {
                 display: block;
@@ -328,98 +350,60 @@
             .menu-toggle .hamburger::before { top: -8px; }
             .menu-toggle .hamburger::after { top: 8px; }
 
-            /* Hamburger animation when menu is open */
             body.nav-open .menu-toggle .hamburger { background-color: transparent; }
             body.nav-open .menu-toggle .hamburger::before { transform: rotate(45deg); top: 0; }
             body.nav-open .menu-toggle .hamburger::after { transform: rotate(-45deg); top: 0; }
 
-            /* Mobile Navigation Panel */
             .sidebar {
                 position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100vh;
+                top: 0; left: 0;
+                width: 100%; height: 100vh;
                 background-color: rgba(18, 18, 18, 0.95);
                 backdrop-filter: blur(10px);
                 z-index: 1000;
-                display: flex;
-                align-items: center;
-                justify-content: center;
+                display: flex; align-items: center; justify-content: center;
                 transform: translateX(100%);
                 transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             }
-            body.nav-open .sidebar {
-                transform: translateX(0);
-            }
+            body.nav-open .sidebar { transform: translateX(0); }
             .sidebar .navigation ul { text-align: center; }
             .sidebar .navigation li { margin-bottom: 30px; }
             .sidebar .navigation a {
-                font-size: 2rem;
-                font-weight: 600;
-                color: var(--primary-text);
+                font-size: 2rem; font-weight: 600; color: var(--primary-text);
             }
             .sidebar .navigation a.active { color: var(--accent-color); }
-            .sidebar-section { display: none; } /* Hide news in the overlay menu */
+            .sidebar-section { display: none; }
 
-            /* Main Layout Stacking */
-            .main-layout {
-                flex-direction: column;
-                gap: 0;
-            }
+            .main-layout { flex-direction: column; gap: 0; }
             .main-content, .sidebar { width: 100%; padding: 0; }
 
-            /* Card-based Design */
             .research-project, .member-block {
                 background-color: var(--surface-color);
                 border-radius: 12px;
                 padding: 20px;
                 margin-bottom: 25px;
                 border-bottom: none;
-                display: flex;
-                flex-direction: column;
-                overflow: hidden;
+                display: flex; flex-direction: column; overflow: hidden;
             }
 
-            /* Research Projects on Mobile */
             .research-project img {
-                float: none;
-                width: 100%;
-                margin: 0 0 15px 0;
-                border-radius: 8px;
+                float: none; width: 100%; margin: 0 0 15px 0; border-radius: 8px;
             }
             .research-project p { text-align: left; }
-            
-            /* Team Members on Mobile */
+
             .member-block { align-items: center; }
-            .member-block img {
-                width: 100px;
-                height: 100px;
-            }
+            .member-block img { width: 100px; height: 100px; }
             .member-info { text-align: center; }
             .member-info .name { font-size: 1.3rem; color: var(--primary-text); }
             .member-info .title { color: var(--secondary-text); }
             .member-info a { word-break: break-all; }
 
-            /* Publications on Mobile */
             #publications ol { padding-left: 25px; }
-            #publications h3 {
-                color: var(--accent-color);
-                border-bottom: none;
-                padding-bottom: 0;
-            }
+            #publications h3 { color: var(--accent-color); border-bottom: none; padding-bottom: 0; }
             #publications li strong { color: var(--primary-text); }
 
-            /* Footer & Credit */
-            .site-footer {
-                color: var(--secondary-text);
-                border-top: 1px solid var(--surface-color);
-                padding-top: 20px;
-            }
-            .credit {
-                background: var(--surface-color);
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-            }
+            .site-footer { color: var(--secondary-text); border-top: 1px solid var(--surface-color); padding-top: 20px; }
+            .credit { background: var(--surface-color); box-shadow: 0 2px 10px rgba(0,0,0,0.5); }
             .credit a { color: var(--accent-color); }
         }
     </style>
@@ -437,14 +421,84 @@
 
         <div class="main-layout">
             <main class="main-content">
+                <!-- HOME / WELCOME -->
                 <section id="home" class="page-content active-page">
-                    <img src="pic/mainphotov3.png" alt="A relevant research image on quantum computing" class="full-width">
-                    <h2>Welcome to the Quantum Lab</h2>
-                    <p>Based in the Department of Physics at Guru Nanak Dev University, Amritsar, our research group stands at the forefront of quantum information science. We focus on advancing quantum sensing and its applications in magnetic resonance, developing novel quantum algorithms, and exploring the fundamental nature and applications of quantum entanglement. Our mission is to strengthen India’s role in the global quantum technology landscape through world-class research and by training the next generation of quantum scientists and engineers.</p>
+                    <img src="pic/mainphotov3.png" alt="Quantum Lab montage" class="full-width reveal fade-in" style="--reveal-delay:80ms;">
 
-                    <p>We combine theoretical physics with computational science to address complex challenges in quantum technologies. The core values of our lab are scientific rigor, creativity, and collaboration—driving us to solve some of the most profound problems in modern physics. We believe that a strong interdisciplinary approach is essential to unlocking the full potential of quantum mechanics. We invite you to explore our website to learn more about our work in quantum sensing, quantum machine learning, and secure quantum computation.</p>
+                    <h2 class="reveal fade-up" style="--reveal-delay:120ms;">Welcome to the Quantum Lab</h2>
+
+                    <div class="feature-chips">
+                      <span class="chip reveal fade-up" style="--reveal-delay:140ms;">Quantum Sensing</span>
+                      <span class="chip alt reveal fade-up" style="--reveal-delay:180ms;">Quantum Computing & Simulation</span>
+                      <span class="chip reveal fade-up" style="--reveal-delay:220ms;">Custom Scientific Instruments</span>
+                      <span class="chip alt reveal fade-up" style="--reveal-delay:260ms;">Physics Education Innovation</span>
+                    </div>
+
+                    <p class="reveal fade-up" style="--reveal-delay:240ms;">
+                      We are a hands-on, ideas-to-hardware group advancing quantum technologies and physics education.
+                      Our work spans sensitive quantum sensors, simulation-driven quantum computing, in-house
+                      instrumentation, and classroom innovation—all to push the frontiers of discovery and learning.
+                    </p>
+
+                    <div class="feature-grid">
+                      <div class="feature-card reveal fade-up" style="--reveal-delay:120ms;">
+                        <h3>
+                          <!-- Bolt icon -->
+                          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+                          Quantum Sensing (NV, SiC, Organics)
+                        </h3>
+                        <p>
+                          We build room-temperature quantum sensors using <strong>NV centers in diamond</strong>,
+                          <strong>silicon vacancies in SiC</strong>, and <strong>photo-excited triplet states in
+                          doped organic crystals</strong>. These platforms enable ultra-sensitive measurements of
+                          magnetic fields, temperature, and pressure for materials, biology, and beyond.
+                        </p>
+                      </div>
+
+                      <div class="feature-card reveal fade-up" style="--reveal-delay:180ms;">
+                        <h3>
+                          <!-- CPU / QPU icon -->
+                          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3v2H7a2 2 0 0 0-2 2v2H3v2h2v2H3v2h2v2a2 2 0 0 0 2 2h2v2h2v-2h2v2h2v-2h2a2 2 0 0 0 2-2v-2h2v-2h-2v-2h2V9h-2V7a2 2 0 0 0-2-2h-2V3h-2v2h-2V3H9zm-2 6h10v6H7V9z"/></svg>
+                          Quantum Computing & Simulation
+                        </h3>
+                        <p>
+                          We explore quantum algorithms on <strong>IBM Quantum</strong> and on a
+                          <strong>simulation-based NMR quantum information processor</strong>. A core thrust is
+                          simulating <strong>nuclear and chemical Hamiltonians</strong> for chemistry, materials,
+                          and many-body physics—bridging theory with practical quantum workflows.
+                        </p>
+                      </div>
+
+                      <div class="feature-card reveal fade-up" style="--reveal-delay:240ms;">
+                        <h3>
+                          <!-- Wrench / build icon -->
+                          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M22.7 19.3 16.3 12.9a6 6 0 0 0-7.6-7.6l3.1 3.1-2.1 2.1-3.1-3.1A6 6 0 0 0 12.9 13l6.4 6.4 3.4-3.4zM3 21a2 2 0 1 0 2-2 2 2 0 0 0-2 2z"/></svg>
+                          Instruments We Build
+                        </h3>
+                        <p>
+                          From concept to circuit, we design and fabricate our own scientific instruments: custom
+                          <strong>RF chains</strong>, <strong>FPGA-based control</strong>, precision electronics,
+                          and experimental tooling. This lets us iterate fast, unlock new measurements, and keep our
+                          science agile and affordable.
+                        </p>
+                      </div>
+
+                      <div class="feature-card reveal fade-up" style="--reveal-delay:300ms;">
+                        <h3>
+                          <!-- Mortarboard / education icon -->
+                          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 22 8l-10 5L2 8l10-5zm0 7 7-3.5V13c0 3.3-4 5-7 5s-7-1.7-7-5V6.5L12 10z"/></svg>
+                          Physics Education, Upgraded
+                        </h3>
+                        <p>
+                          We integrate modern technologies into physics experiments to deepen conceptual understanding
+                          and engagement. By reimagining labs and demonstrations with sensors, data, and interactivity,
+                          we help students experience physics as <em>something they do</em>, not just read.
+                        </p>
+                      </div>
+                    </div>
                 </section>
 
+                <!-- RESEARCH -->
                 <section id="research" class="page-content">
                     <h2>Research Projects</h2>
                     <div class="research-project">
@@ -467,6 +521,7 @@
                     </div>
                 </section>
 
+                <!-- PUBLICATIONS -->
                 <section id="publications" class="page-content">
                     <h2>Publications</h2>
                     <h3>2025</h3>
@@ -475,12 +530,12 @@
                         <li>Blankenship, B. W.; Rho, Y.; Jones, Z.; Meier, T.; Li, R.; Druga, E.; <strong>Singh, H.</strong>; Xia, X.; Ajoy, A.; Grigoropoulos, C. P. "Optically Detected Magnetic Resonance Imaging and Sensing Within Functionalized Additively Manufactured Microporous Structures." (arXiv:2502.16434) <a href="#">[DOI]</a> <a href="#">[PDF]</a></li>
                         <li><strong>Singh, H.</strong>; D'Souza, N.; Zhong, K.; Druga, E.; Oshiro, J.; Blankenship, B.; Reimer, J. A.; Breeze, J. D.; Ajoy, A. "Room-temperature quantum sensing with photoexcited triplet electrons in organic crystals." <em>Physical Review Research</em>, <strong>7</strong>, 013192 (2025). <a href="#">[DOI]</a> <a href="#">[PDF]</a></li>
                     </ol>
-                    
+
                     <h3>2024</h3>
                     <ol>
                         <li>Blankenship, B.; Li, J.; Jones, Z.; Parashar, M.; Zhao, N.; <strong>Singh, H.</strong>; Li, R.; Sophia, A.; Sarkar, A.; Yang, R.; Meier, T.; Rho, Y.; Ajoy, A.; Grigoropoulos, C. P. "Spatially Resolved Quantum Sensing with High-Density Bubble-Printed Nanodiamonds." <em>Nano Letters</em>, <strong>24</strong>, 9711–9719 (2024). <a href="#">[DOI]</a> <a href="#">[PDF]</a></li>
                     </ol>
-                    
+
                     <h3>2023</h3>
                     <ol>
                         <li><strong>Singh, H.</strong>; Anisimov, A. N.; Baranov, P. G.; Suter, D. "Zero-Field ODMR and Relaxation of Si-Vacancy Centers in 6H-SiC." <em>Materials Research Express</em>, <strong>10</strong>, 11 (2023). <a href="#">[DOI]</a> <a href="#">[PDF]</a></li>
@@ -489,50 +544,51 @@
                         <li><strong>Singh, H.</strong>; Anisimov, A. N.; Baranov, P. G.; Suter, D. "Identification of different silicon vacancy centers in 6H-SiC." (arXiv:2212.10256, 2023). <a href="#">[DOI]</a> <a href="#">[PDF]</a></li>
                         <li><strong>Singh, H.</strong>; Hollberg, M. A.; Ghezellou, M.; Ul-Hassan, J.; Kaiser, F.; Suter, D. "Characterization of single shallow silicon-vacancy centers in 4H-SiC." <em>Physical Review B</em>, <strong>107</strong>, 134117 (2023). <a href="#">[DOI]</a> <a href="#">[PDF]</a></li>
                     </ol>
-                    
+
                     <h3>2022</h3>
                     <ol>
                         <li><strong>Singh, H.</strong>; Hollberg, A. M.; Anisimov, A. N.; Baranov, P. G.; Suter, D. "Multi-photon multi-quantum transitions in the spin-3/2 silicon-vacancy centers of SiC." <em>Physical Review Research</em>, <strong>4</strong>, 023022 (2022). <a href="#">[DOI]</a> <a href="#">[PDF]</a></li>
                         <li>Breev, I. D.; Shang, Z.; Poshakinskiy, A. V.; <strong>Singh, H.</strong>; et al. "Inverted fine structure of a 6H-SiC qubit enabling robust spin-photon interface." <em>npj Quantum Information</em>, <strong>8</strong>, 23 (2022). <a href="#">[DOI]</a> <a href="#">[PDF]</a></li>
                     </ol>
-                    
+
                     <h3>2021</h3>
                     <ol>
                         <li>Soltamov, V. A.; Yavkin, B. V.; Anisimov, A. N.; <strong>Singh, H.</strong>; Bundakova, A. P.; Mamin, G. V.; Orlinskii, S. B.; Mokhov, E. N.; Suter, D.; Baranov, P. G. "Relaxation processes and high-field coherent spin manipulation in color center ensembles in 6H-SiC." <em>Physical Review B</em>, <strong>103</strong>, 195201 (2021). <a href="#">[DOI]</a> <a href="#">[PDF]</a></li>
                         <li><strong>Singh, H.</strong>; Anisimov, A. N.; Baranov, P. G.; Suter, D. "Optical spin initialization of spin-3/2 silicon vacancy centers in 6H-SiC at room temperature." <em>Physical Review B</em>, <strong>103</strong>, 104103 (2021). <a href="#">[DOI]</a> <a href="#">[PDF]</a></li>
                     </ol>
-                    
+
                     <h3>2020</h3>
                     <ol>
                         <li><strong>Singh, H.</strong>; Arvind; Dorai, K. "Using a Lindbladian approach to model decoherence in two coupled nuclear spins via correlated phase-damping and amplitude damping noise channels." <em>Pramana – Journal of Physics</em>, <strong>94</strong>, 160 (2020). <a href="#">[DOI]</a> <a href="#">[PDF]</a></li>
                         <li><strong>Singh, H.</strong>; Anisimov, A. N.; Nagalyuk, S. S.; Mokhov, E. N.; Baranov, P. G.; Suter, D. "Experimental characterization of spin 3/2 silicon-vacancy centers in 6H-SiC." <em>Physical Review B</em>, <strong>101</strong>, 134110 (2020). <a href="#">[DOI]</a> <a href="#">[PDF]</a></li>
                     </ol>
-                    
+
                     <h3>2018</h3>
                     <ol>
                         <li>Singh, A.; <strong>Singh, H.</strong>; Arvind; Dorai, K. "Experimental classification of tripartite entanglement without prior information on an NMR quantum information processor." <em>Physical Review A</em>, <strong>98</strong>, 032301 (2018). <a href="#">[DOI]</a> <a href="#">[PDF]</a></li>
                         <li>Devra, A.; Prabhu, P.; <strong>Singh, H.</strong>; Arvind; Dorai, K. "Efficient experimental design of high-fidelity three-qubit quantum gates via genetic programming." <em>Quantum Information Processing</em>, <strong>17</strong>, 67 (2018). <a href="#">[DOI]</a> <a href="#">[PDF]</a></li>
                         <li><strong>Singh, H.</strong>; Arvind; Dorai, K. "Evolution of tripartite entangled states in a decohering environment and their experimental protection using dynamical decoupling." <em>Physical Review A</em>, <strong>97</strong>, 022302 (2018). <a href="#">[DOI]</a> <a href="#">[PDF]</a></li>
                     </ol>
-                    
+
                     <h3>2017</h3>
                     <ol>
                         <li><strong>Singh, H.</strong>; Arvind; Dorai, K. "Experimentally freezing quantum discord in a dissipative environment using dynamical decoupling." <em>EPL</em>, <strong>118</strong>, 50001 (2017). <a href="#">[DOI]</a> <a href="#">[PDF]</a></li>
                         <li>Sharma, R.; Gogna, N.; <strong>Singh, H.</strong>; Dorai, K. "Fast profiling of metabolite mixtures using chemometric analysis of a speeded-up 2D heteronuclear correlation NMR experiment." <em>RSC Advances</em>, <strong>7</strong>, 29860 (2017). <a href="#">[DOI]</a> <a href="#">[PDF]</a></li>
                         <li><strong>Singh, H.</strong>; Arvind; Dorai, K. "Experimental protection of arbitrary states in a two-qubit subspace by nested Uhrig dynamical decoupling." <em>Physical Review A</em>, <strong>95</strong>, 052337 (2017). <a href="#">[DOI]</a> <a href="#">[PDF]</a></li>
                     </ol>
-                    
+
                     <h3>2016</h3>
                     <ol>
                         <li><strong>Singh, H.</strong>; Arvind; Dorai, K. "Constructing valid density matrices on an NMR quantum information processor via maximum likelihood estimation." <em>Physics Letters A</em>, <strong>380</strong>, 3051–3056 (2016). <a href="#">[DOI]</a> <a href="#">[PDF]</a></li>
                     </ol>
-                    
+
                     <h3>2014</h3>
                     <ol>
                         <li><strong>Singh, H.</strong>; Arvind; Dorai, K. "Experimental protection against evolution of states in a subspace via a super-Zeno scheme on an NMR quantum information processor." <em>Physical Review A</em>, <strong>90</strong>, 052329 (2014). <a href="#">[DOI]</a> <a href="#">[PDF]</a></li>
                     </ol>
                 </section>
 
+                <!-- MEMBERS -->
                 <section id="members" class="page-content">
                     <h2>Our Team</h2>
 
@@ -544,7 +600,7 @@
                                 <p class="name">Dr. Harpreet Singh</p>
                                 <p class="title">Professor of Physics</p>
                                 <p>Dr. Singh leads the Quantum Lab at GNDU.</p>
-                                <p><a href="mailto:hsingh.physics@gndu.ac.in">harpreet.phy@gndu.ac.in</a></p>
+                                <p><a href="mailto:hsingh.physics@gndu.ac.in">hsingh.physics@gndu.ac.in</a></p>
                             </div>
                         </div>
                     </div>
@@ -607,7 +663,7 @@
                     </div>
                 </section>
 
-                <!-- NEW: Collaborators Section -->
+                <!-- COLLABORATORS -->
                 <section id="collaborators" class="page-content">
                     <h2>Collaborators</h2>
                     <ul class="collab-list">
@@ -619,6 +675,7 @@
                     </ul>
                 </section>
 
+                <!-- CONTACT -->
                 <section id="contact" class="page-content">
                     <h2>Get in Touch</h2>
                     <div class="contact-info">
@@ -636,7 +693,7 @@
                         </ul>
                     </div>
                     <h3>Prospective Students</h3>
-                    <p>We are always looking for motivated and talented graduate and undergraduate students to join our team. If you are interested in quantum computing, quantum information, or theoretical physics, please review our research and publications. Prospective graduate students should apply through the official GNDU Physics Department admissions process. Feel to email Dr. Singh directly with your CV and a brief statement of your research interests.</p>
+                    <p>We are always looking for motivated and talented graduate and undergraduate students to join our team. If you are interested in quantum computing, quantum information, or theoretical physics, please review our research and publications. Prospective graduate students should apply through the official GNDU Physics Department admissions process. Feel free to email Dr. Singh directly with your CV and a brief statement of your research interests.</p>
                     <div class="map-container">
                         <iframe
                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3395.96014280598!2d74.82198081515436!3d31.66224748132371!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39196345a5416395%3A0x3c73335805884358!2sGuru%20Nanak%20Dev%20University!5e0!3m2!1sen!2sin!4v1663842612345!5m2!1sen!2sin"
@@ -655,7 +712,6 @@
                         <li><a href="#research">Research</a></li>
                         <li><a href="#publications">Publications</a></li>
                         <li><a href="#members">Group Members</a></li>
-                        <!-- NEW: Collaborators menu item -->
                         <li><a href="#collaborators">Collaborators</a></li>
                         <li><a href="#contact">Contact</a></li>
                     </ul>
@@ -709,7 +765,7 @@
                     e.preventDefault();
                     const targetId = this.getAttribute('href').substring(1);
                     switchTab(targetId);
-                    
+
                     // Close mobile menu on link click
                     if (body.classList.contains('nav-open')) {
                         body.classList.remove('nav-open');
@@ -723,6 +779,27 @@
                     body.classList.toggle('nav-open');
                 });
             }
+
+            // --- Reveal on scroll (IntersectionObserver) ---
+            (function(){
+              const els = document.querySelectorAll('.reveal');
+              if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                els.forEach(el => el.classList.add('in'));
+                return;
+              }
+              const io = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                  if (entry.isIntersecting) {
+                    const el = entry.target;
+                    const delay = getComputedStyle(el).getPropertyValue('--reveal-delay') || '0ms';
+                    el.style.transitionDelay = delay.trim();
+                    el.classList.add('in');
+                    io.unobserve(el);
+                  }
+                });
+              }, { threshold: 0.15 });
+              els.forEach(el => io.observe(el));
+            })();
         });
     </script>
 </body>
