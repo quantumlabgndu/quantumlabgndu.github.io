@@ -274,39 +274,65 @@
         }
         .feature-card h3 .icon { width: 18px; height: 18px; }
 
-        /* ---------- News Rotator ---------- */
+        /* ---------- News Rotator: Vertical Slide with Controls ---------- */
         .news-rotator {
           position: relative;
-          min-height: 90px;              /* tall enough for longest item */
           overflow: hidden;
+          border: 1px solid var(--light-gray);
+          border-radius: 10px;
+          padding: 12px 40px 12px 12px; /* room for controls on the right */
+          background: #fff;
         }
         .news-rotator ul {
           list-style: none;
           padding-left: 0;
           margin: 0;
-          position: relative;
+          transition: transform .5s ease;
+          will-change: transform;
         }
-        .news-item {
+        .news-item { margin: 0; }
+
+        .news-ctrl {
           position: absolute;
-          top: 0; left: 0; right: 0;
-          opacity: 0;
-          transform: translateY(6px);
-          transition: opacity .6s ease, transform .6s ease;
-          will-change: opacity, transform;
+          right: 8px;
+          border: none;
+          background: #f5f5f5;
+          width: 26px; height: 26px;
+          border-radius: 6px;
+          display: grid; place-items: center;
+          cursor: pointer;
+          transition: transform .15s ease, background .2s ease;
         }
-        .news-item.is-active {
-          opacity: 1;
-          transform: translateY(0);
-          position: absolute;
+        .news-ctrl:hover { background: #ededed; transform: translateY(-1px); }
+        .news-ctrl:active { transform: translateY(0); }
+        .news-ctrl svg path { fill: var(--dark-gray); }
+
+        .news-ctrl.prev { top: 8px; }
+        .news-ctrl.next { top: 40px; }
+        .news-ctrl.pause { top: 72px; }
+
+        .news-ctrl.pause .pp-icon {
+          display:inline-block; width:10px; height:12px; position:relative;
         }
+        .news-ctrl.pause .pp-icon::before,
+        .news-ctrl.pause .pp-icon::after {
+          content:""; position:absolute; top:0; bottom:0; width:3px; background: var(--dark-gray);
+        }
+        .news-ctrl.pause .pp-icon::before { left:0; }
+        .news-ctrl.pause .pp-icon::after { right:0; }
+        .news-ctrl.pause[aria-pressed="true"] .pp-icon::before,
+        .news-ctrl.pause[aria-pressed="true"] .pp-icon::after { display:none; }
+        .news-ctrl.pause[aria-pressed="true"] .pp-icon {
+          width: 0; height: 0;
+          border-left: 10px solid var(--dark-gray);
+          border-top: 6px solid transparent;
+          border-bottom: 6px solid transparent;
+        }
+
         @media (prefers-reduced-motion: reduce) {
-          .news-item {
-            position: static !important;
-            opacity: 1 !important;
-            transform: none !important;
-            transition: none !important;
-          }
-          .news-rotator { min-height: auto; }
+          .news-rotator { padding-right: 12px; }
+          .news-ctrl { display: none; }
+          .news-rotator ul { transition: none !important; }
         }
 
         /* ========================================
@@ -752,12 +778,24 @@
                     </ul>
                 </nav>
 
-                <!-- LATEST NEWS: Auto-rotator -->
+                <!-- LATEST NEWS: Vertical Slide with Controls -->
                 <div class="sidebar-section">
                   <h3>Latest News</h3>
-                  <div class="news-rotator" aria-live="polite">
+                  <div class="news-rotator vslide" aria-live="polite">
+                    <!-- controls -->
+                    <button class="news-ctrl prev" aria-label="Previous news" title="Previous">
+                      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7.4 14.6 12 10l4.6 4.6 1.4-1.4L12 7.2 6 13.2z"/></svg>
+                    </button>
+                    <button class="news-ctrl next" aria-label="Next news" title="Next">
+                      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7.4 9.4 12 14l4.6-4.6 1.4 1.4L12 16.8 6 10.8z"/></svg>
+                    </button>
+                    <button class="news-ctrl pause" aria-pressed="false" aria-label="Pause autoplay" title="Pause/Play">
+                      <span class="pp-icon" aria-hidden="true"></span>
+                    </button>
+
+                    <!-- items -->
                     <ul>
-                      <li class="news-item is-active">January 2025: The Quantum Lab has received funding from the Inter-University Accelerator Centre (IUAC), New Delhi, for the project titled “Creation of Silicon Vacancies in Silicon Carbide for Quantum Sensing Applications.” This project aims to develop and study defect-based quantum sensors using silicon carbide as a platform.</li>
+                      <li class="news-item">January 2025: The Quantum Lab has received funding from the Inter-University Accelerator Centre (IUAC), New Delhi, for the project titled “Creation of Silicon Vacancies in Silicon Carbide for Quantum Sensing Applications.” This project aims to develop and study defect-based quantum sensors using silicon carbide as a platform.</li>
                       <li class="news-item">February 2025: Welcome to Sumit Choudhary for joining the Quantum Lab as a Ph.D. student!</li>
                       <li class="news-item">August 2025: Welcome to Rajdeep Singh for joining the Quantum Lab as a Ph.D. student!</li>
                     </ul>
@@ -801,7 +839,6 @@
             }
 
             function sectionScrollToTop() {
-                // keep page from being midway when switching sections
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
 
@@ -811,14 +848,13 @@
                     const targetId = this.getAttribute('href').substring(1);
                     switchTab(targetId);
 
-                    // Close mobile menu on link click
                     if (body.classList.contains('nav-open')) {
                         body.classList.remove('nav-open');
                     }
                 });
             });
 
-            // --- NEW Mobile Hamburger Menu Logic ---
+            // --- Mobile Hamburger Menu ---
             if (menuToggle) {
                 menuToggle.addEventListener('click', function () {
                     body.classList.toggle('nav-open');
@@ -846,50 +882,85 @@
               els.forEach(el => io.observe(el));
             })();
 
-            // --- Latest News Auto-Rotator (fade in/out) ---
+            // --- Latest News: Vertical Slide with Controls ---
             (function(){
-              const rotator = document.querySelector('.news-rotator');
+              const rotator = document.querySelector('.news-rotator.vslide');
               if (!rotator) return;
 
+              const list = rotator.querySelector('ul');
               const items = Array.from(rotator.querySelectorAll('.news-item'));
-              if (items.length <= 1) return; // nothing to rotate
+              if (items.length <= 1) return;
 
-              // Respect reduced motion
               const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
               if (reduceMotion) return;
 
+              const btnPrev  = rotator.querySelector('.news-ctrl.prev');
+              const btnNext  = rotator.querySelector('.news-ctrl.next');
+              const btnPause = rotator.querySelector('.news-ctrl.pause');
+
               let idx = 0;
+              let offsets = [];
+              let heights = [];
+              let autoplay = true;
               let timer = null;
-              const DURATION = 4500; // ms each item visible
+              const DURATION = 4500;   // ms each item visible
 
-              // ensure only first is active if user edited markup
-              items.forEach((li, i) => li.classList.toggle('is-active', i === 0));
+              // Ensure items are block for stacking
+              items.forEach(li => { li.style.display = 'block'; });
 
-              const show = (n) => {
-                items[idx].classList.remove('is-active');
-                idx = (typeof n === 'number') ? n % items.length : (idx + 1) % items.length;
-                items[idx].classList.add('is-active');
-              };
+              function computeLayout() {
+                list.style.transform = 'translateY(0px)';
+                heights = items.map(li => li.getBoundingClientRect().height);
+                offsets = heights.reduce((acc, _h, i) => {
+                  acc.push((acc[i-1] || 0) + (i ? heights[i-1] : 0));
+                  return acc;
+                }, []);
+                rotator.style.minHeight = (heights[idx] + 24) + 'px';
+                list.style.transform = `translateY(-${offsets[idx]}px)`;
+              }
 
-              const start = () => {
-                stop();
-                timer = setInterval(() => show(), DURATION);
-              };
+              let resizeTO = null;
+              window.addEventListener('resize', () => {
+                clearTimeout(resizeTO);
+                resizeTO = setTimeout(() => computeLayout(), 120);
+              });
 
-              const stop = () => {
+              function goTo(n) {
+                idx = (n + items.length) % items.length;
+                rotator.style.minHeight = (heights[idx] + 24) + 'px';
+                list.style.transform = `translateY(-${offsets[idx]}px)`;
+              }
+
+              function next() { goTo(idx + 1); }
+              function prev() { goTo(idx - 1); }
+
+              function start() {
+                if (timer) clearInterval(timer);
+                if (!autoplay) return;
+                timer = setInterval(next, DURATION);
+              }
+              function stop() {
                 if (timer) clearInterval(timer);
                 timer = null;
-              };
+              }
 
-              // Pause on hover (desktop)
+              btnNext.addEventListener('click', () => { stop(); next(); start(); });
+              btnPrev.addEventListener('click', () => { stop(); prev(); start(); });
+              btnPause.addEventListener('click', () => {
+                autoplay = !autoplay;
+                btnPause.setAttribute('aria-pressed', String(!autoplay));
+                if (autoplay) start(); else stop();
+              });
+
               rotator.addEventListener('mouseenter', stop);
               rotator.addEventListener('mouseleave', start);
 
-              // Pause when page/tab hidden
               document.addEventListener('visibilitychange', () => {
                 if (document.hidden) stop(); else start();
               });
 
+              computeLayout();
+              setTimeout(computeLayout, 200); // after fonts/layout settle
               start();
             })();
         });
