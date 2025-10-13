@@ -274,6 +274,41 @@
         }
         .feature-card h3 .icon { width: 18px; height: 18px; }
 
+        /* ---------- News Rotator ---------- */
+        .news-rotator {
+          position: relative;
+          min-height: 90px;              /* tall enough for longest item */
+          overflow: hidden;
+        }
+        .news-rotator ul {
+          list-style: none;
+          padding-left: 0;
+          margin: 0;
+          position: relative;
+        }
+        .news-item {
+          position: absolute;
+          top: 0; left: 0; right: 0;
+          opacity: 0;
+          transform: translateY(6px);
+          transition: opacity .6s ease, transform .6s ease;
+          will-change: opacity, transform;
+        }
+        .news-item.is-active {
+          opacity: 1;
+          transform: translateY(0);
+          position: absolute;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .news-item {
+            position: static !important;
+            opacity: 1 !important;
+            transform: none !important;
+            transition: none !important;
+          }
+          .news-rotator { min-height: auto; }
+        }
+
         /* ========================================
         NEW "SPICY" MOBILE STYLES 🌶️
         ======================================== */
@@ -533,7 +568,7 @@
 
                     <h3>2024</h3>
                     <ol>
-                        <li>Blankenship, B.; Li, J.; Jones, Z.; Parashar, M.; Zhao, N.; <strong>Singh, H.</strong>; Li, R.; Sophia, A.; Sarkar, A.; Yang, R.; Meier, T.; Rho, Y.; Ajoy, A.; Grigoropoulos, C. P. "Spatially Resolved Quantum Sensing with High-Density Bubble-Printed Nanodiamonds." <em>Nano Letters</em>, <strong>24</strong>, 9711–9719 (2024). <a href="#">[DOI]</a> <a href="#">[PDF]</a></li>
+                        <li>Blankenship, B.; Li, J.; Jones, Z.; Parashar, M.; Zhao, N.; <strong>Singh, H.</strong>; Li, R.; Sophia, A.; Sarkar, A.; Yang, R.; Meier, T.; Rho, Y; Ajoy, A.; Grigoropoulos, C. P. "Spatially Resolved Quantum Sensing with High-Density Bubble-Printed Nanodiamonds." <em>Nano Letters</em>, <strong>24</strong>, 9711–9719 (2024). <a href="#">[DOI]</a> <a href="#">[PDF]</a></li>
                     </ol>
 
                     <h3>2023</h3>
@@ -716,13 +751,17 @@
                         <li><a href="#contact">Contact</a></li>
                     </ul>
                 </nav>
+
+                <!-- LATEST NEWS: Auto-rotator -->
                 <div class="sidebar-section">
-                    <h3>Latest News</h3>
+                  <h3>Latest News</h3>
+                  <div class="news-rotator" aria-live="polite">
                     <ul>
-                        <li>January 2025: The Quantum Lab has received funding from the Inter-University Accelerator Centre (IUAC), New Delhi, for the project titled “Creation of Silicon Vacancies in Silicon Carbide for Quantum Sensing Applications.” This project aims to develop and study defect-based quantum sensors using silicon carbide as a platform. </li>
-                        <li>February 2025: Welcome to Sumit Choudhary for joining the Quantum Lab as a Ph.D. student!</li>
-                        <li>August 2025: Welcome to Rajdeep Singh for joining the Quantum Lab as a Ph.D. student!</li>
+                      <li class="news-item is-active">January 2025: The Quantum Lab has received funding from the Inter-University Accelerator Centre (IUAC), New Delhi, for the project titled “Creation of Silicon Vacancies in Silicon Carbide for Quantum Sensing Applications.” This project aims to develop and study defect-based quantum sensors using silicon carbide as a platform.</li>
+                      <li class="news-item">February 2025: Welcome to Sumit Choudhary for joining the Quantum Lab as a Ph.D. student!</li>
+                      <li class="news-item">August 2025: Welcome to Rajdeep Singh for joining the Quantum Lab as a Ph.D. student!</li>
                     </ul>
+                  </div>
                 </div>
             </aside>
         </div>
@@ -749,6 +788,7 @@
                 });
                 const targetSection = document.getElementById(targetId);
                 if (targetSection) {
+                    sectionScrollToTop();
                     targetSection.classList.add('active-page');
                 }
 
@@ -758,6 +798,11 @@
                         navLink.classList.add('active');
                     }
                 });
+            }
+
+            function sectionScrollToTop() {
+                // keep page from being midway when switching sections
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
 
             navLinks.forEach(link => {
@@ -799,6 +844,53 @@
                 });
               }, { threshold: 0.15 });
               els.forEach(el => io.observe(el));
+            })();
+
+            // --- Latest News Auto-Rotator (fade in/out) ---
+            (function(){
+              const rotator = document.querySelector('.news-rotator');
+              if (!rotator) return;
+
+              const items = Array.from(rotator.querySelectorAll('.news-item'));
+              if (items.length <= 1) return; // nothing to rotate
+
+              // Respect reduced motion
+              const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+              if (reduceMotion) return;
+
+              let idx = 0;
+              let timer = null;
+              const DURATION = 4500; // ms each item visible
+
+              // ensure only first is active if user edited markup
+              items.forEach((li, i) => li.classList.toggle('is-active', i === 0));
+
+              const show = (n) => {
+                items[idx].classList.remove('is-active');
+                idx = (typeof n === 'number') ? n % items.length : (idx + 1) % items.length;
+                items[idx].classList.add('is-active');
+              };
+
+              const start = () => {
+                stop();
+                timer = setInterval(() => show(), DURATION);
+              };
+
+              const stop = () => {
+                if (timer) clearInterval(timer);
+                timer = null;
+              };
+
+              // Pause on hover (desktop)
+              rotator.addEventListener('mouseenter', stop);
+              rotator.addEventListener('mouseleave', start);
+
+              // Pause when page/tab hidden
+              document.addEventListener('visibilitychange', () => {
+                if (document.hidden) stop(); else start();
+              });
+
+              start();
             })();
         });
     </script>
