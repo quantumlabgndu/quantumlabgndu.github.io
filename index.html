@@ -105,10 +105,14 @@
 
     /* ---------- HERO (photo + overlay) ---------- */
     .hero{
-      position:relative; width:100%; min-height:44vh; border-radius:12px; overflow:hidden;
+      position:relative; width:100%; min-height:60vh; border-radius:12px; overflow:hidden;
       background:
-        linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.25) 40%, rgba(0,0,0,.55)),
-        url('pic/lab-hero.jpg') center/cover no-repeat;
+        linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.25) 40%, rgba(0,0,0,.65)),
+        image-set(
+          url('pic/lab-hero.webp') type('image/webp'),
+          url('pic/lab-hero.jpg') type('image/jpeg')
+        );
+      background-position:center; background-size:cover; background-repeat:no-repeat;
     }
     .hero__content{
       position:absolute; inset:auto 0 0 0; padding:24px 20px 18px;
@@ -190,7 +194,7 @@
       .news-rotator ul{transition:none!important}
     }
 
-    /* Sidebar image card (your extra graphic) */
+    /* Sidebar image card */
     .sidebar-figure{
       margin-top:14px;
       border:1px solid var(--light-gray);
@@ -338,7 +342,7 @@
             <li>Blankenship, B. W. … <em>(arXiv:2502.16434)</em> <a href="#">[DOI]</a> <a href="#">[PDF]</a></li>
             <li><strong>Singh, H.</strong> … <em>Physical Review Research</em>, <strong>7</strong>, 013192 (2025). <a href="#">[DOI]</a> <a href="#">[PDF]</a></li>
           </ol>
-          <!-- (rest unchanged for brevity) -->
+          <!-- (Add the rest of your years/items here) -->
         </section>
 
         <!-- MEMBERS -->
@@ -464,7 +468,7 @@
           </ul>
         </nav>
 
-        <!-- Your sidebar image card -->
+        <!-- Sidebar image card -->
         <figure class="sidebar-figure">
           <img src="pic/mainphotov3.png"
                alt="Quantum Lab highlights: NV center, SiC vacancies, doped organics, computing, instruments, education"
@@ -505,6 +509,9 @@
     <div class="credit"><a href="https://sites.google.com/site/harpreetsb89/home?authuser=0">PI Webpage</a></div>
   </div>
 
+  <!-- ======================
+       SCRIPTS (fixed)
+  ====================== -->
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const navLinks = document.querySelectorAll('.navigation a');
@@ -512,6 +519,7 @@
       const menuToggle = document.querySelector('.menu-toggle');
       const body = document.body;
 
+      /* Tab navigation */
       function switchTab(targetId){
         contentSections.forEach(s => s.classList.remove('active-page'));
         const t = document.getElementById(targetId);
@@ -521,7 +529,6 @@
           if (a.getAttribute('href') === '#'+targetId){ a.classList.add('active'); a.setAttribute('aria-current','page'); }
         });
       }
-
       navLinks.forEach(a=>{
         a.addEventListener('click',e=>{
           e.preventDefault();
@@ -530,9 +537,10 @@
         });
       });
 
+      /* Mobile menu */
       if (menuToggle){ menuToggle.addEventListener('click',()=> body.classList.toggle('nav-open')); }
 
-      /* publications filter */
+      /* Publications filter */
       (function(){
         const input = document.getElementById('pub-filter');
         if(!input) return;
@@ -543,7 +551,7 @@
         });
       })();
 
-      /* news rotator */
+      /* News rotator */
       (function(){
         const rot = document.querySelector('.news-rotator.vslide');
         if(!rot) return;
@@ -555,7 +563,7 @@
         const next = rot.querySelector('.news-ctrl.next');
         const pause = rot.querySelector('.news-ctrl.pause');
 
-        if (items.length <= 1) return;
+        if (!list || items.length <= 1) return;
 
         let idx=0, offsets=[], heights=[], autoplay=true, timer=null;
         const DURATION = 4500;
@@ -573,23 +581,24 @@
         function play(){ if(timer) clearInterval(timer); if(!autoplay) return; timer=setInterval(()=>goTo(idx+1), DURATION); }
         function stop(){ if(timer) clearInterval(timer); timer=null; }
 
-        next.addEventListener('click',()=>{ stop(); goTo(idx+1); play(); });
-        prev.addEventListener('click',()=>{ stop(); goTo(idx-1); play(); });
-        pause.addEventListener('click',()=>{ autoplay=!autoplay; pause.setAttribute('aria-pressed', String(!autoplay)); if(autoplay) play(); else stop(); });
+        if (next) next.addEventListener('click',()=>{ stop(); goTo(idx+1); play(); });
+        if (prev) prev.addEventListener('click',()=>{ stop(); goTo(idx-1); play(); });
+        if (pause) pause.addEventListener('click',()=>{ autoplay=!autoplay; pause.setAttribute('aria-pressed', String(!autoplay)); if(autoplay) play(); else stop(); });
 
         rot.addEventListener('mouseenter', stop); rot.addEventListener('mouseleave', play);
         document.addEventListener('visibilitychange', ()=>{ if(document.hidden) stop(); else play(); });
 
-        // keyboard
+        // keyboard a11y
         rot.tabIndex=0; rot.setAttribute('role','region'); rot.setAttribute('aria-label','Latest news ticker');
         rot.addEventListener('keydown',(e)=>{
-          if(e.key==='ArrowUp'){ e.preventDefault(); prev.click(); }
-          else if(e.key==='ArrowDown'){ e.preventDefault(); next.click(); }
-          else if(e.key===' '){ e.preventDefault(); pause.click(); }
+          if(e.key==='ArrowUp'){ e.preventDefault(); prev?.click(); }
+          else if(e.key==='ArrowDown'){ e.preventDefault(); next?.click(); }
+          else if(e.key===' '){ e.preventDefault(); pause?.click(); }
         });
 
-        measure(); setTimeout(m
-easure,200); play();
+        measure();
+        setTimeout(measure, 200); /* fixed the stray newline bug */
+        play();
         window.addEventListener('resize',()=>{ clearTimeout(window.__newsTO); window.__newsTO=setTimeout(measure,120); });
       })();
     });
