@@ -604,6 +604,68 @@
             <li><strong>Dr. Tarunpreet Kaur</strong>, Khalsa College of Engineering, Amritsar</li>
           </ul>
         </section>
+        <section id="internal" class="page-content" aria-labelledby="internal-heading">
+          <h2 id="internal-heading">Internal</h2>
+        
+          <!-- Password Gate -->
+          <div class="internal-card" id="internal-gate">
+            <p><strong>Restricted area.</strong> Enter the password to view lab instrument manuals.</p>
+            <form id="internal-form" autocomplete="off">
+              <label for="internal-pass" class="sr-only">Password</label>
+              <input id="internal-pass" name="password" type="password" inputmode="text"
+                     placeholder="Enter password" aria-label="Password"
+                     required />
+              <button type="submit" aria-label="Unlock">Unlock</button>
+              <button type="button" id="internal-logout" class="linklike" title="Clear saved unlock">Clear</button>
+            </form>
+            <p id="internal-msg" class="muted" role="status" aria-live="polite"></p>
+          </div>
+        
+          <!-- Instruments (hidden until unlocked) -->
+          <div id="internal-content" hidden>
+            <h3>Lab Instruments & Manuals</h3>
+            <p class="muted">Click a manual to open the PDF. File names are the link text.</p>
+            <ul class="instrument-list">
+              <!-- Use data-href to keep URLs inactive until unlocked -->
+              <li>
+                <a href="#" data-href="manuals/NV_ODMR_Controller.pdf" download>
+                  NV_ODMR_Controller.pdf
+                </a>
+              </li>
+              <li>
+                <a href="#" data-href="manuals/FPGA_Pulse_Generator.pdf" download>
+                  FPGA_Pulse_Generator.pdf
+                </a>
+              </li>
+              <li>
+                <a href="#" data-href="manuals/RF_Switch_Matrix.pdf" download>
+                  RF_Switch_Matrix.pdf
+                </a>
+              </li>
+              <li>
+                <a href="#" data-href="manuals/Compact_ODMR_Head.pdf" download>
+                  Compact_ODMR_Head.pdf
+                </a>
+              </li>
+              <li>
+                <a href="#" data-href="manuals/Lock_in_Amplifier.pdf" download>
+                  Lock_in_Amplifier.pdf
+                </a>
+              </li>
+              <li>
+                <a href="#" data-href="manuals/Microwave_Source_Synthesizer.pdf" download>
+                  Microwave_Source_Synthesizer.pdf
+                </a>
+              </li>
+              <!-- Add more as needed -->
+            </ul>
+        
+            <div class="internal-note">
+              <p class="muted">Tip: Put your PDFs in <code>/manuals/</code> at the repo root (same level as <code>index.html</code>). You can also link to a GitHub repo/release/Drive URL; just replace the <code>data-href</code> values.</p>
+            </div>
+          </div>
+        </section>
+
 
         <!-- CONTACT -->
         <section id="contact" class="page-content">
@@ -640,6 +702,7 @@
             <li><a href="#publications">Publications</a></li>
             <li><a href="#members">Group Members</a></li>
             <li><a href="#collaborators">Collaborators</a></li>
+            <li><a href="#internal">Internal</a></li>
             <li><a href="#contact">Contact</a></li>
           </ul>
         </nav>
@@ -726,6 +789,71 @@
           items.forEach(li => li.style.display = li.textContent.toLowerCase().includes(q) ? '' : 'none');
         });
       })();
+      /* ===== Internal (client-side gate) ===== */
+      (function(){
+        const PASS = 'sumitrajdeep';             // <-- your current password
+        const KEY  = 'qlab_internal_ok_v1';      // storage key
+      
+        const gate = document.getElementById('internal-gate');
+        const content = document.getElementById('internal-content');
+        if(!gate || !content) return;
+      
+        const form   = document.getElementById('internal-form');
+        const input  = document.getElementById('internal-pass');
+        const msg    = document.getElementById('internal-msg');
+        const logout = document.getElementById('internal-logout');
+      
+        function activateLinks(){
+          // Move data-href into href only when unlocked
+          content.querySelectorAll('a[data-href]').forEach(a=>{
+            const url = a.getAttribute('data-href');
+            if(url) a.setAttribute('href', url);
+            a.removeAttribute('data-href');
+            a.setAttribute('rel','noopener');
+            a.setAttribute('target','_blank');
+          });
+        }
+      
+        function unlock(silent){
+          gate.hidden = true;
+          content.hidden = false;
+          localStorage.setItem(KEY, '1');
+          activateLinks();
+          if(!silent){ msg.textContent = 'Unlocked.'; }
+        }
+      
+        function lock(){
+          localStorage.removeItem(KEY);
+          content.hidden = true;
+          gate.hidden = false;
+          if(input){ input.value = ''; input.focus(); }
+          msg.textContent = 'Cleared. Enter password again to unlock.';
+        }
+      
+        // Auto-unlock if saved
+        if(localStorage.getItem(KEY) === '1'){
+          unlock(true);
+        }
+      
+        // Handle submit
+        form?.addEventListener('submit', (e)=>{
+          e.preventDefault();
+          const val = (input?.value || '').trim();
+          if(val === PASS){
+            unlock(false);
+          }else{
+            msg.textContent = 'Incorrect password.';
+            msg.style.color = '#b00020';
+            setTimeout(()=>{ msg.textContent=''; msg.style.color=''; }, 2000);
+            input?.focus();
+            input?.select();
+          }
+        });
+      
+        // Clear saved unlock
+        logout?.addEventListener('click', lock);
+      })();
+
 
       /* News rotator */
       (function(){
