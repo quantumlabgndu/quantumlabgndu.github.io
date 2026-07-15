@@ -388,16 +388,6 @@ const QLab = (() => {
             "img": "",
             "title": "PhD. Candidate",
             "id": "m1784112662157"
-        },
-        {
-            "name": "baqi",
-            "role": "",
-            "category": "phd",
-            "bio": "",
-            "email": "",
-            "img": "",
-            "title": "",
-            "id": "m1784114099489"
         }
     ],
     "collaborators": [
