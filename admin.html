@@ -212,75 +212,99 @@
       });
     });
 
+    // ─── Edit State ───
+    let editing = { list: null, id: null, idx: null };
+    function setBtn(id, text) { const b=document.getElementById(id); if(b){ b.textContent=text; b.classList.replace('btn-primary','btn-success'); } }
+    function resetBtn(id, text) { const b=document.getElementById(id); if(b){ b.textContent=text; b.classList.replace('btn-success','btn-primary'); editing={list:null,id:null,idx:null}; } }
+
     // ─── Refresh helpers ───
     function refreshAll() { refreshAnn(); refreshMem(); refreshCol(); refreshPub(); refreshRes(); refreshIR(); refreshUsr(); }
 
     function refreshAnn() {
       const d=QLab.getData(), b=document.getElementById('annBody');
-      b.innerHTML=(d.announcements||[]).map(a=>`<tr><td>${a.date}</td><td>${a.text}</td><td class="admin-actions"><button class="btn btn-danger btn-sm" onclick="delItem('announcements','${a.id}')">✕</button></td></tr>`).join('');
+      b.innerHTML=(d.announcements||[]).map(a=>`<tr><td>${a.date}</td><td>${a.text}</td><td class="admin-actions"><button class="btn btn-ghost btn-sm" onclick="editAnn('${a.id}')">✎</button> <button class="btn btn-danger btn-sm" onclick="delItem('announcements','${a.id}')">✕</button></td></tr>`).join('');
     }
+    window.editAnn = (id) => { const item=QLab.getData().announcements.find(x=>x.id===id); if(item) { document.getElementById('annDate').value=item.date; document.getElementById('annText').value=item.text; editing={list:'announcements',id}; setBtn('addAnn','💾 Update'); } };
+
     function refreshMem() {
       const d=QLab.getData(), b=document.getElementById('memBody');
-      b.innerHTML=(d.members||[]).map(m=>`<tr><td>${m.name}</td><td>${m.role}</td><td>${m.category}</td><td class="admin-actions"><button class="btn btn-danger btn-sm" onclick="delItem('members','${m.id}')">✕</button></td></tr>`).join('');
+      b.innerHTML=(d.members||[]).map(m=>`<tr><td>${m.name}</td><td>${m.role}</td><td>${m.category}</td><td class="admin-actions"><button class="btn btn-ghost btn-sm" onclick="editMem('${m.id}')">✎</button> <button class="btn btn-danger btn-sm" onclick="delItem('members','${m.id}')">✕</button></td></tr>`).join('');
     }
+    window.editMem = (id) => { const item=QLab.getData().members.find(x=>x.id===id); if(item) { document.getElementById('memName').value=item.name; document.getElementById('memRole').value=item.role; document.getElementById('memCat').value=item.category; document.getElementById('memBio').value=item.bio; document.getElementById('memEmail').value=item.email||''; document.getElementById('memImg').value=item.img||''; editing={list:'members',id}; setBtn('addMem','💾 Update'); } };
+
     function refreshCol() {
       const d=QLab.getData(), b=document.getElementById('colBody');
-      b.innerHTML=(d.collaborators||[]).map(c=>`<tr><td>${c.name}</td><td>${c.affiliation}</td><td class="admin-actions"><button class="btn btn-danger btn-sm" onclick="delItem('collaborators','${c.id}')">✕</button></td></tr>`).join('');
+      b.innerHTML=(d.collaborators||[]).map(c=>`<tr><td>${c.name}</td><td>${c.affiliation}</td><td class="admin-actions"><button class="btn btn-ghost btn-sm" onclick="editCol('${c.id}')">✎</button> <button class="btn btn-danger btn-sm" onclick="delItem('collaborators','${c.id}')">✕</button></td></tr>`).join('');
     }
+    window.editCol = (id) => { const item=QLab.getData().collaborators.find(x=>x.id===id); if(item) { document.getElementById('colName').value=item.name; document.getElementById('colAff').value=item.affiliation; editing={list:'collaborators',id}; setBtn('addCol','💾 Update'); } };
+
     function refreshPub() {
       const d=QLab.getData(), b=document.getElementById('pubBody');
-      b.innerHTML=(d.publications||[]).map(p=>`<tr><td>${p.year}</td><td style="max-width:400px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.title}</td><td class="admin-actions"><button class="btn btn-danger btn-sm" onclick="delItem('publications','${p.id}')">✕</button></td></tr>`).join('');
+      b.innerHTML=(d.publications||[]).map(p=>`<tr><td>${p.year}</td><td style="max-width:400px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.title}</td><td class="admin-actions"><button class="btn btn-ghost btn-sm" onclick="editPub('${p.id}')">✎</button> <button class="btn btn-danger btn-sm" onclick="delItem('publications','${p.id}')">✕</button></td></tr>`).join('');
     }
+    window.editPub = (id) => { const item=QLab.getData().publications.find(x=>x.id===id); if(item) { document.getElementById('pubYear').value=item.year; document.getElementById('pubAuth').value=item.authors; document.getElementById('pubTitle').value=item.title; document.getElementById('pubJournal').value=item.journal; document.getElementById('pubDoi').value=item.doi==='#'?'':item.doi; document.getElementById('pubPdf').value=item.pdf==='#'?'':item.pdf; editing={list:'publications',id}; setBtn('addPub','💾 Update'); } };
+
     function refreshRes() {
       const d=QLab.getData(), b=document.getElementById('resBody2');
-      b.innerHTML=(d.research||[]).map(r=>`<tr><td>${r.title}</td><td class="admin-actions"><button class="btn btn-danger btn-sm" onclick="delItem('research','${r.id}')">✕</button></td></tr>`).join('');
+      b.innerHTML=(d.research||[]).map(r=>`<tr><td>${r.title}</td><td class="admin-actions"><button class="btn btn-ghost btn-sm" onclick="editRes('${r.id}')">✎</button> <button class="btn btn-danger btn-sm" onclick="delItem('research','${r.id}')">✕</button></td></tr>`).join('');
     }
+    window.editRes = (id) => { const item=QLab.getData().research.find(x=>x.id===id); if(item) { document.getElementById('resTitle').value=item.title; document.getElementById('resImg').value=item.img||''; document.getElementById('resBody').value=item.body; editing={list:'research',id}; setBtn('addRes','💾 Update'); } };
+
     function refreshIR() {
       const d=QLab.getData(), b=document.getElementById('irBody');
-      b.innerHTML=(d.internalResources||[]).map(r=>`<tr><td>${r.name}</td><td>${r.category}</td><td class="admin-actions"><button class="btn btn-danger btn-sm" onclick="delItem('internalResources','${r.id}')">✕</button></td></tr>`).join('');
+      b.innerHTML=(d.internalResources||[]).map(r=>`<tr><td>${r.name}</td><td>${r.category}</td><td class="admin-actions"><button class="btn btn-ghost btn-sm" onclick="editIR('${r.id}')">✎</button> <button class="btn btn-danger btn-sm" onclick="delItem('internalResources','${r.id}')">✕</button></td></tr>`).join('');
     }
+    window.editIR = (id) => { const item=QLab.getData().internalResources.find(x=>x.id===id); if(item) { document.getElementById('irName').value=item.name; document.getElementById('irUrl').value=item.url; document.getElementById('irCat').value=item.category; document.getElementById('irSize').value=item.size; editing={list:'internalResources',id}; setBtn('addIR','💾 Update'); } };
+
     function refreshUsr() {
       const users=QLab.getUsers(), b=document.getElementById('usrBody');
-      b.innerHTML=users.map((u,i)=>`<tr><td>${u.username}</td><td>${u.name}</td><td>${u.role}</td><td class="admin-actions"><button class="btn btn-danger btn-sm" onclick="delUser(${i})">✕</button></td></tr>`).join('');
+      b.innerHTML=users.map((u,i)=>`<tr><td>${u.username}</td><td>${u.name}</td><td>${u.role}</td><td class="admin-actions"><button class="btn btn-ghost btn-sm" onclick="editUsr(${i})">✎</button> <button class="btn btn-danger btn-sm" onclick="delUser(${i})">✕</button></td></tr>`).join('');
     }
+    window.editUsr = (idx) => { const u=QLab.getUsers()[idx]; if(u) { document.getElementById('usrName').value=u.username; document.getElementById('usrPass').value=u.password; document.getElementById('usrDisplay').value=u.name; document.getElementById('usrRole').value=u.role; document.getElementById('usrAvatar').value=u.avatar||''; editing={list:'users',idx}; setBtn('addUsr','💾 Update'); } };
 
-    // ─── Add Handlers ───
+    // ─── Add/Update Handlers ───
     document.getElementById('addAnn').addEventListener('click', () => {
-      const date=document.getElementById('annDate').value, text=document.getElementById('annText').value;
-      if(!date||!text) return; QLab.addItem('announcements',{date,text}); refreshAnn();
-      document.getElementById('annDate').value=''; document.getElementById('annText').value='';
+      const date=document.getElementById('annDate').value, text=document.getElementById('annText').value; if(!date||!text) return;
+      if(editing.id) QLab.updateItem('announcements', editing.id, {date,text}); else QLab.addItem('announcements',{date,text});
+      refreshAnn(); document.getElementById('annDate').value=''; document.getElementById('annText').value=''; resetBtn('addAnn','+ Add Announcement');
     });
     document.getElementById('addMem').addEventListener('click', () => {
       const name=document.getElementById('memName').value; if(!name) return;
-      QLab.addItem('members',{name,role:document.getElementById('memRole').value,category:document.getElementById('memCat').value,bio:document.getElementById('memBio').value,email:document.getElementById('memEmail').value,img:document.getElementById('memImg').value,title:document.getElementById('memRole').value});
-      refreshMem(); ['memName','memRole','memBio','memEmail','memImg'].forEach(id=>document.getElementById(id).value='');
+      const data = {name,role:document.getElementById('memRole').value,category:document.getElementById('memCat').value,bio:document.getElementById('memBio').value,email:document.getElementById('memEmail').value,img:document.getElementById('memImg').value,title:document.getElementById('memRole').value};
+      if(editing.id) QLab.updateItem('members', editing.id, data); else QLab.addItem('members',data);
+      refreshMem(); ['memName','memRole','memBio','memEmail','memImg'].forEach(id=>document.getElementById(id).value=''); resetBtn('addMem','+ Add Member');
     });
     document.getElementById('addCol').addEventListener('click', () => {
       const name=document.getElementById('colName').value; if(!name) return;
-      QLab.addItem('collaborators',{name,affiliation:document.getElementById('colAff').value}); refreshCol();
-      document.getElementById('colName').value=''; document.getElementById('colAff').value='';
+      const data = {name,affiliation:document.getElementById('colAff').value};
+      if(editing.id) QLab.updateItem('collaborators', editing.id, data); else QLab.addItem('collaborators',data);
+      refreshCol(); document.getElementById('colName').value=''; document.getElementById('colAff').value=''; resetBtn('addCol','+ Add Collaborator');
     });
     document.getElementById('addPub').addEventListener('click', () => {
       const year=parseInt(document.getElementById('pubYear').value); if(!year) return;
-      QLab.addItem('publications',{year,authors:document.getElementById('pubAuth').value,title:document.getElementById('pubTitle').value,journal:document.getElementById('pubJournal').value,doi:document.getElementById('pubDoi').value||'#',pdf:document.getElementById('pubPdf').value||'#'});
-      refreshPub(); ['pubYear','pubAuth','pubTitle','pubJournal','pubDoi','pubPdf'].forEach(id=>document.getElementById(id).value='');
+      const data = {year,authors:document.getElementById('pubAuth').value,title:document.getElementById('pubTitle').value,journal:document.getElementById('pubJournal').value,doi:document.getElementById('pubDoi').value||'#',pdf:document.getElementById('pubPdf').value||'#'};
+      if(editing.id) QLab.updateItem('publications', editing.id, data); else QLab.addItem('publications',data);
+      refreshPub(); ['pubYear','pubAuth','pubTitle','pubJournal','pubDoi','pubPdf'].forEach(id=>document.getElementById(id).value=''); resetBtn('addPub','+ Add Publication');
     });
     document.getElementById('addRes').addEventListener('click', () => {
       const title=document.getElementById('resTitle').value; if(!title) return;
-      QLab.addItem('research',{title,img:document.getElementById('resImg').value,body:document.getElementById('resBody').value}); refreshRes();
-      ['resTitle','resImg','resBody'].forEach(id=>document.getElementById(id).value='');
+      const data = {title,img:document.getElementById('resImg').value,body:document.getElementById('resBody').value};
+      if(editing.id) QLab.updateItem('research', editing.id, data); else QLab.addItem('research',data);
+      refreshRes(); ['resTitle','resImg','resBody'].forEach(id=>document.getElementById(id).value=''); resetBtn('addRes','+ Add Project');
     });
     document.getElementById('addIR').addEventListener('click', () => {
       const name=document.getElementById('irName').value; if(!name) return;
-      QLab.addItem('internalResources',{name,url:document.getElementById('irUrl').value,category:document.getElementById('irCat').value,size:document.getElementById('irSize').value||'—',uploadedBy:'Admin',date:new Date().toISOString().split('T')[0]});
-      refreshIR(); ['irName','irUrl','irSize'].forEach(id=>document.getElementById(id).value='');
+      const data = {name,url:document.getElementById('irUrl').value,category:document.getElementById('irCat').value,size:document.getElementById('irSize').value||'—'};
+      if(editing.id) QLab.updateItem('internalResources', editing.id, data); else { data.uploadedBy='Admin'; data.date=new Date().toISOString().split('T')[0]; QLab.addItem('internalResources',data); }
+      refreshIR(); ['irName','irUrl','irSize'].forEach(id=>document.getElementById(id).value=''); resetBtn('addIR','+ Add Resource');
     });
     document.getElementById('addUsr').addEventListener('click', () => {
       const username=document.getElementById('usrName').value; if(!username) return;
       const users=QLab.getUsers();
-      users.push({username,password:document.getElementById('usrPass').value,name:document.getElementById('usrDisplay').value,role:document.getElementById('usrRole').value,avatar:document.getElementById('usrAvatar').value});
+      const data = {username,password:document.getElementById('usrPass').value,name:document.getElementById('usrDisplay').value,role:document.getElementById('usrRole').value,avatar:document.getElementById('usrAvatar').value};
+      if(editing.idx !== null) users[editing.idx] = data; else users.push(data);
       QLab.saveUsers(users); refreshUsr();
-      ['usrName','usrPass','usrDisplay','usrAvatar'].forEach(id=>document.getElementById(id).value='');
+      ['usrName','usrPass','usrDisplay','usrAvatar'].forEach(id=>document.getElementById(id).value=''); resetBtn('addUsr','+ Add User');
     });
     document.getElementById('resetBtn').addEventListener('click', () => {
       if(confirm('Reset ALL data to defaults? This cannot be undone.')) {
