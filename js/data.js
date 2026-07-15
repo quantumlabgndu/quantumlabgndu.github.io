@@ -11,6 +11,7 @@ const QLab = (() => {
   const SESSION_KEY = 'qlab_session_v1';
 
   /* ── Default seed data (matches the original site content) ── */
+  // /* --- DATA START --- */
   const DEFAULT_DATA = {
     siteTitle: 'Quantum Lab',
     piName: 'Dr. Harpreet Singh',
@@ -161,6 +162,7 @@ const QLab = (() => {
     { username: 'rajdeep', password: 'rajdeep123', name: 'Rajdeep Singh', role: 'member', avatar: 'pic/rajdeep.jpg' },
     { username: 'abdul', password: 'abdul123', name: 'Abdul Baqi', role: 'member', avatar: 'pic/Abdul.jpeg' }
   ];
+  // /* --- DATA END --- */
 
   /* ── CRUD helpers ── */
   function _load() {
