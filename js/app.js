@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ─── Render Members ───
   const membersList = document.getElementById('membersList');
-  const categories = { pi: 'Principal Investigator', phd: 'Ph.D. Scholars', undergrad: 'Undergraduate', alumni: 'Alumni' };
+  const categories = { pi: 'Principal Investigator', phd: 'Ph.D. Scholars', grad: 'Graduate Students', undergrad: 'Undergraduate', alumni: 'Alumni' };
   if (membersList && data.members) {
     let html = '';
     for (const [cat, label] of Object.entries(categories)) {
