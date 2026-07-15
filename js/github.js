@@ -52,7 +52,8 @@ const GitHubAPI = (() => {
     if (!token) throw new Error('GitHub token not set. Go to Admin → GitHub Settings.');
 
     const path = `${UPLOAD_DIR}/${fileName}`;
-    const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`;
+    const encodedFileName = encodeURIComponent(fileName);
+    const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${UPLOAD_DIR}/${encodedFileName}`;
 
     // Check if file already exists (to get its SHA for update)
     let sha = null;
@@ -130,7 +131,8 @@ const GitHubAPI = (() => {
     if (!token) throw new Error('GitHub token not set.');
 
     const path = `${UPLOAD_DIR}/${fileName}`;
-    const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`;
+    const encodedFileName = encodeURIComponent(fileName);
+    const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${UPLOAD_DIR}/${encodedFileName}`;
 
     // If no SHA provided, fetch it
     if (!sha) {
