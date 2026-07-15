@@ -70,7 +70,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const hamburger = document.getElementById('hamburger');
   const navLinks = document.getElementById('navLinks');
   if (hamburger) {
-    hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+      hamburger.classList.toggle('open');
+    });
   }
 
   // ─── Page Navigation (SPA-like) ───
@@ -90,13 +93,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     // Close mobile menu
     if (navLinks) navLinks.classList.remove('open');
+    if (hamburger) hamburger.classList.remove('open');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   allNavLinks.forEach(a => {
     a.addEventListener('click', e => {
       e.preventDefault();
-      switchPage(a.getAttribute('data-page'));
+      const pageId = a.getAttribute('data-page');
+      switchPage(pageId);
+      history.pushState(null, '', '#' + pageId);
     });
   });
 
