@@ -41,6 +41,7 @@
         <a href="#" data-tab="settings">⚙ Settings</a>
       </nav>
       <div style="margin-top:auto;padding-top:1rem;border-top:1px solid var(--border)">
+        <button class="btn btn-success btn-sm" id="publishBtn" style="width:100%;justify-content:center;margin-bottom:.5rem">🚀 Publish to Website</button>
         <a href="index.html" style="font-size:.85rem;display:block;margin-bottom:.5rem">← Back to Site</a>
         <button class="btn btn-ghost btn-sm" id="adminLogoutBtn" style="width:100%;justify-content:center">Logout</button>
       </div>
@@ -360,6 +361,56 @@
       const files = await GitHubAPI.listUploads();
       if (files.length===0) { list.textContent='No files found in /uploads/.'; return; }
       list.innerHTML=files.map(f=>`<div style="padding:.4rem 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center"><a href="${f.pagesUrl}" target="_blank">${f.name}</a> <span style="color:var(--text3);font-size:.8rem">${GitHubAPI.formatSize(f.size)}</span></div>`).join('');
+    });
+
+    // ─── Publish Data to GitHub ───
+    document.getElementById('publishBtn')?.addEventListener('click', async () => {
+      const btn = document.getElementById('publishBtn');
+      if (typeof GitHubAPI === 'undefined' || !GitHubAPI.hasToken()) {
+        alert('Please set your GitHub Token in the 🐙 GitHub tab first to enable publishing.');
+        return;
+      }
+      if (!confirm('Are you sure you want to publish the current data to the public website?')) return;
+      
+      try {
+        btn.textContent = '⏳ Publishing...';
+        btn.disabled = true;
+
+        // Fetch current data.js file
+        const res = await fetch('js/data.js');
+        if (!res.ok) throw new Error('Could not fetch data.js');
+        let jsContent = await res.text();
+
+        // Prepare new data
+        const currentData = QLab.getData();
+        const currentUsers = QLab.getUsers();
+        const newDataStr = `\n  const DEFAULT_DATA = ${JSON.stringify(currentData, null, 4)};\n\n  /* ── Default users for internal login ── */\n  const DEFAULT_USERS = ${JSON.stringify(currentUsers, null, 4)};\n  `;
+
+        // Replace content between markers
+        const startMarker = '// /* --- DATA START --- */';
+        const endMarker = '// /* --- DATA END --- */';
+        const startIdx = jsContent.indexOf(startMarker);
+        const endIdx = jsContent.indexOf(endMarker);
+
+        if (startIdx === -1 || endIdx === -1) throw new Error('Could not find data markers in js/data.js');
+
+        const newJsContent = jsContent.substring(0, startIdx + startMarker.length) + 
+                             newDataStr + 
+                             jsContent.substring(endIdx);
+
+        // Upload to repo
+        const base64 = GitHubAPI.stringToBase64(newJsContent);
+        await GitHubAPI.updateRepoFile('js/data.js', base64, 'Published new CMS data via Admin Panel');
+        
+        btn.textContent = '✅ Published!';
+        btn.classList.replace('btn-success', 'btn-primary');
+        setTimeout(() => { btn.textContent = '🚀 Publish to Website'; btn.classList.replace('btn-primary', 'btn-success'); btn.disabled = false; }, 3000);
+      } catch (err) {
+        console.error(err);
+        alert('Failed to publish: ' + err.message);
+        btn.textContent = '🚀 Publish to Website';
+        btn.disabled = false;
+      }
     });
   });
   </script>
