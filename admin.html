@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Admin Panel — Quantum Lab</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="pic/favicon.png">
+</head>
+<body>
+  <!-- Admin Login -->
+  <div id="adminGate" class="section" style="min-height:100vh;display:grid;place-items:center">
+    <div class="login-container" style="margin:0">
+      <div class="card login-card">
+        <h2>⚙️ Admin Panel</h2>
+        <p style="text-align:center;color:var(--text2);font-size:.9rem;margin-bottom:1.5rem">Manage your Quantum Lab website content.</p>
+        <form id="adminLoginForm">
+          <div class="form-group"><label for="adUser">Username</label><input type="text" id="adUser" class="form-input" required placeholder="admin"></div>
+          <div class="form-group"><label for="adPass">Password</label><input type="password" id="adPass" class="form-input" required placeholder="Password"></div>
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">Login →</button>
+          <p class="form-msg" id="adMsg"></p>
+        </form>
+        <p style="text-align:center;margin-top:1rem"><a href="index.html" style="font-size:.85rem">← Back to Site</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Dashboard -->
+  <div id="adminDash" class="admin-layout" style="display:none">
+    <aside class="admin-sidebar">
+      <h2>⚙ Admin</h2>
+      <nav>
+        <a href="#" class="active" data-tab="announcements">📢 Announcements</a>
+        <a href="#" data-tab="members">👥 Members</a>
+        <a href="#" data-tab="collaborators">🤝 Collaborators</a>
+        <a href="#" data-tab="publications">📄 Publications</a>
+        <a href="#" data-tab="research">🔬 Research</a>
+        <a href="#" data-tab="resources">📁 Resources</a>
+        <a href="#" data-tab="users">🔑 Users</a>
+        <a href="#" data-tab="github">🐙 GitHub</a>
+        <a href="#" data-tab="settings">⚙ Settings</a>
+      </nav>
+      <div style="margin-top:auto;padding-top:1rem;border-top:1px solid var(--border)">
+        <a href="index.html" style="font-size:.85rem;display:block;margin-bottom:.5rem">← Back to Site</a>
+        <button class="btn btn-ghost btn-sm" id="adminLogoutBtn" style="width:100%;justify-content:center">Logout</button>
+      </div>
+    </aside>
+
+    <main class="admin-main" id="adminMain">
+      <!-- Announcements Tab -->
+      <div class="admin-tab active" id="tab-announcements">
+        <h2>📢 Announcements</h2>
+        <div class="admin-form" style="margin-bottom:2rem">
+          <div class="form-group"><label>Date</label><input type="date" class="form-input" id="annDate"></div>
+          <div class="form-group"><label>Text</label><input type="text" class="form-input" id="annText" placeholder="Announcement text"></div>
+          <button class="btn btn-primary btn-sm" id="addAnn">+ Add Announcement</button>
+        </div>
+        <table class="admin-table"><thead><tr><th>Date</th><th>Text</th><th>Actions</th></tr></thead><tbody id="annBody"></tbody></table>
+      </div>
+
+      <!-- Members Tab -->
+      <div class="admin-tab" id="tab-members" style="display:none">
+        <h2>👥 Group Members</h2>
+        <div class="admin-form" style="margin-bottom:2rem">
+          <div class="form-group"><label>Name</label><input type="text" class="form-input" id="memName" placeholder="Full name"></div>
+          <div class="form-group"><label>Role</label><input type="text" class="form-input" id="memRole" placeholder="e.g. Ph.D. Candidate"></div>
+          <div class="form-group"><label>Category</label>
+            <select class="form-input" id="memCat"><option value="pi">PI</option><option value="phd">Ph.D.</option><option value="undergrad">Undergraduate</option><option value="alumni">Alumni</option></select>
+          </div>
+          <div class="form-group"><label>Bio</label><input type="text" class="form-input" id="memBio" placeholder="Brief description"></div>
+          <div class="form-group"><label>Email</label><input type="email" class="form-input" id="memEmail" placeholder="email@gndu.ac.in"></div>
+          <div class="form-group"><label>Image Path</label><input type="text" class="form-input" id="memImg" placeholder="pic/name.png"></div>
+          <button class="btn btn-primary btn-sm" id="addMem">+ Add Member</button>
+        </div>
+        <table class="admin-table"><thead><tr><th>Name</th><th>Role</th><th>Category</th><th>Actions</th></tr></thead><tbody id="memBody"></tbody></table>
+      </div>
+
+      <!-- Collaborators Tab -->
+      <div class="admin-tab" id="tab-collaborators" style="display:none">
+        <h2>🤝 Collaborators</h2>
+        <div class="admin-form" style="margin-bottom:2rem">
+          <div class="form-group"><label>Name</label><input type="text" class="form-input" id="colName" placeholder="Full name"></div>
+          <div class="form-group"><label>Affiliation</label><input type="text" class="form-input" id="colAff" placeholder="Institution / department"></div>
+          <button class="btn btn-primary btn-sm" id="addCol">+ Add Collaborator</button>
+        </div>
+        <table class="admin-table"><thead><tr><th>Name</th><th>Affiliation</th><th>Actions</th></tr></thead><tbody id="colBody"></tbody></table>
+      </div>
+
+      <!-- Publications Tab -->
+      <div class="admin-tab" id="tab-publications" style="display:none">
+        <h2>📄 Publications</h2>
+        <div class="admin-form" style="margin-bottom:2rem">
+          <div class="form-group"><label>Year</label><input type="number" class="form-input" id="pubYear" placeholder="2025"></div>
+          <div class="form-group"><label>Authors</label><input type="text" class="form-input" id="pubAuth" placeholder="Use <strong> for PI name"></div>
+          <div class="form-group"><label>Title</label><input type="text" class="form-input" id="pubTitle" placeholder="Paper title in quotes"></div>
+          <div class="form-group"><label>Journal</label><input type="text" class="form-input" id="pubJournal" placeholder="Journal, vol, page (year)"></div>
+          <div class="form-group"><label>DOI Link</label><input type="text" class="form-input" id="pubDoi" placeholder="https://doi.org/..."></div>
+          <div class="form-group"><label>PDF Link</label><input type="text" class="form-input" id="pubPdf" placeholder="URL or #"></div>
+          <button class="btn btn-primary btn-sm" id="addPub">+ Add Publication</button>
+        </div>
+        <table class="admin-table"><thead><tr><th>Year</th><th>Title</th><th>Actions</th></tr></thead><tbody id="pubBody"></tbody></table>
+      </div>
+
+      <!-- Research Tab -->
+      <div class="admin-tab" id="tab-research" style="display:none">
+        <h2>🔬 Research Projects</h2>
+        <div class="admin-form" style="margin-bottom:2rem">
+          <div class="form-group"><label>Title</label><input type="text" class="form-input" id="resTitle"></div>
+          <div class="form-group"><label>Image Path</label><input type="text" class="form-input" id="resImg" placeholder="pic/image.png"></div>
+          <div class="form-group"><label>Body (HTML)</label><textarea class="form-input" id="resBody" rows="4"></textarea></div>
+          <button class="btn btn-primary btn-sm" id="addRes">+ Add Project</button>
+        </div>
+        <table class="admin-table"><thead><tr><th>Title</th><th>Actions</th></tr></thead><tbody id="resBody2"></tbody></table>
+      </div>
+
+      <!-- Resources Tab -->
+      <div class="admin-tab" id="tab-resources" style="display:none">
+        <h2>📁 Internal Resources</h2>
+        <div class="admin-form" style="margin-bottom:2rem">
+          <div class="form-group"><label>File Name</label><input type="text" class="form-input" id="irName"></div>
+          <div class="form-group"><label>URL</label><input type="text" class="form-input" id="irUrl"></div>
+          <div class="form-group"><label>Category</label>
+            <select class="form-input" id="irCat"><option value="manuals">Manuals</option><option value="data">Data</option><option value="papers">Papers</option><option value="other">Other</option></select>
+          </div>
+          <div class="form-group"><label>Size</label><input type="text" class="form-input" id="irSize" placeholder="e.g. 2.4 MB"></div>
+          <button class="btn btn-primary btn-sm" id="addIR">+ Add Resource</button>
+        </div>
+        <table class="admin-table"><thead><tr><th>Name</th><th>Category</th><th>Actions</th></tr></thead><tbody id="irBody"></tbody></table>
+      </div>
+
+      <!-- Users Tab -->
+      <div class="admin-tab" id="tab-users" style="display:none">
+        <h2>🔑 Internal Users</h2>
+        <div class="admin-form" style="margin-bottom:2rem">
+          <div class="form-group"><label>Username</label><input type="text" class="form-input" id="usrName"></div>
+          <div class="form-group"><label>Password</label><input type="text" class="form-input" id="usrPass"></div>
+          <div class="form-group"><label>Display Name</label><input type="text" class="form-input" id="usrDisplay"></div>
+          <div class="form-group"><label>Role</label>
+            <select class="form-input" id="usrRole"><option value="member">Member</option><option value="admin">Admin</option></select>
+          </div>
+          <div class="form-group"><label>Avatar Path</label><input type="text" class="form-input" id="usrAvatar" placeholder="pic/name.png"></div>
+          <button class="btn btn-primary btn-sm" id="addUsr">+ Add User</button>
+        </div>
+        <table class="admin-table"><thead><tr><th>Username</th><th>Name</th><th>Role</th><th>Actions</th></tr></thead><tbody id="usrBody"></tbody></table>
+      </div>
+
+      <!-- GitHub Tab -->
+      <div class="admin-tab" id="tab-github" style="display:none">
+        <h2>🐙 GitHub Integration</h2>
+        <div class="card" style="padding:2rem;max-width:600px;margin-bottom:1.5rem">
+          <h3 style="margin-bottom:1rem">GitHub Personal Access Token</h3>
+          <p style="color:var(--text2);font-size:.85rem;margin-bottom:1rem">Paste your GitHub PAT to enable file uploads directly to your repo. The token is stored <strong>only in session memory</strong> — it is never saved to disk or committed to code.</p>
+          <div class="form-group"><label>Token</label><input type="password" class="form-input" id="ghToken" placeholder="ghp_xxxxxxxxxx..."></div>
+          <div style="display:flex;gap:.5rem">
+            <button class="btn btn-primary btn-sm" id="ghSave">💾 Save & Verify</button>
+            <button class="btn btn-ghost btn-sm" id="ghClear">Clear Token</button>
+          </div>
+          <p class="form-msg" id="ghMsg" style="margin-top:.75rem"></p>
+        </div>
+        <div class="card" style="padding:2rem;max-width:600px;margin-bottom:1.5rem">
+          <h3 style="margin-bottom:1rem">Upload File to GitHub</h3>
+          <div class="form-group"><label>Choose File</label><input type="file" class="form-input" id="ghFile" style="padding:.4rem"></div>
+          <button class="btn btn-primary btn-sm" id="ghUpload">⬆ Upload to Repo</button>
+          <p class="form-msg" id="ghUpMsg" style="margin-top:.75rem"></p>
+        </div>
+        <div class="card" style="padding:2rem;max-width:600px">
+          <h3 style="margin-bottom:1rem">Files in /uploads/</h3>
+          <button class="btn btn-ghost btn-sm" id="ghRefresh" style="margin-bottom:1rem">🔄 Refresh List</button>
+          <div id="ghFileList" style="color:var(--text2);font-size:.9rem">Click refresh to load files from GitHub.</div>
+        </div>
+      </div>
+
+      <!-- Settings Tab -->
+      <div class="admin-tab" id="tab-settings" style="display:none">
+        <h2>⚙ Settings</h2>
+        <div class="card" style="padding:2rem;max-width:500px">
+          <p style="color:var(--text2);margin-bottom:1rem">Admin credentials: <strong>admin</strong> / <strong>quantumlab2025</strong></p>
+          <p style="color:var(--text2);margin-bottom:1.5rem">All data is stored in your browser's localStorage. To reset to defaults:</p>
+          <button class="btn btn-danger btn-sm" id="resetBtn">⚠ Reset All Data to Defaults</button>
+          <p class="form-msg" id="resetMsg" style="margin-top:1rem"></p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/github.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const gate = document.getElementById('adminGate');
+    const dash = document.getElementById('adminDash');
+
+    // ─── Login ───
+    if (QLab.isAdminLoggedIn()) { gate.style.display='none'; dash.style.display=''; refreshAll(); }
+    document.getElementById('adminLoginForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const msg = document.getElementById('adMsg');
+      if (QLab.adminLogin(document.getElementById('adUser').value, document.getElementById('adPass').value)) {
+        gate.style.display='none'; dash.style.display=''; refreshAll();
+      } else { msg.className='form-msg error'; msg.textContent='Wrong credentials.'; setTimeout(()=>msg.textContent='',2000); }
+    });
+    document.getElementById('adminLogoutBtn').addEventListener('click', () => { QLab.adminLogout(); location.reload(); });
+
+    // ─── Tab Switching ───
+    document.querySelectorAll('[data-tab]').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelectorAll('[data-tab]').forEach(x => x.classList.remove('active'));
+        a.classList.add('active');
+        document.querySelectorAll('.admin-tab').forEach(t => t.style.display='none');
+        document.getElementById('tab-'+a.getAttribute('data-tab')).style.display='';
+      });
+    });
+
+    // ─── Refresh helpers ───
+    function refreshAll() { refreshAnn(); refreshMem(); refreshCol(); refreshPub(); refreshRes(); refreshIR(); refreshUsr(); }
+
+    function refreshAnn() {
+      const d=QLab.getData(), b=document.getElementById('annBody');
+      b.innerHTML=(d.announcements||[]).map(a=>`<tr><td>${a.date}</td><td>${a.text}</td><td class="admin-actions"><button class="btn btn-danger btn-sm" onclick="delItem('announcements','${a.id}')">✕</button></td></tr>`).join('');
+    }
+    function refreshMem() {
+      const d=QLab.getData(), b=document.getElementById('memBody');
+      b.innerHTML=(d.members||[]).map(m=>`<tr><td>${m.name}</td><td>${m.role}</td><td>${m.category}</td><td class="admin-actions"><button class="btn btn-danger btn-sm" onclick="delItem('members','${m.id}')">✕</button></td></tr>`).join('');
+    }
+    function refreshCol() {
+      const d=QLab.getData(), b=document.getElementById('colBody');
+      b.innerHTML=(d.collaborators||[]).map(c=>`<tr><td>${c.name}</td><td>${c.affiliation}</td><td class="admin-actions"><button class="btn btn-danger btn-sm" onclick="delItem('collaborators','${c.id}')">✕</button></td></tr>`).join('');
+    }
+    function refreshPub() {
+      const d=QLab.getData(), b=document.getElementById('pubBody');
+      b.innerHTML=(d.publications||[]).map(p=>`<tr><td>${p.year}</td><td style="max-width:400px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.title}</td><td class="admin-actions"><button class="btn btn-danger btn-sm" onclick="delItem('publications','${p.id}')">✕</button></td></tr>`).join('');
+    }
+    function refreshRes() {
+      const d=QLab.getData(), b=document.getElementById('resBody2');
+      b.innerHTML=(d.research||[]).map(r=>`<tr><td>${r.title}</td><td class="admin-actions"><button class="btn btn-danger btn-sm" onclick="delItem('research','${r.id}')">✕</button></td></tr>`).join('');
+    }
+    function refreshIR() {
+      const d=QLab.getData(), b=document.getElementById('irBody');
+      b.innerHTML=(d.internalResources||[]).map(r=>`<tr><td>${r.name}</td><td>${r.category}</td><td class="admin-actions"><button class="btn btn-danger btn-sm" onclick="delItem('internalResources','${r.id}')">✕</button></td></tr>`).join('');
+    }
+    function refreshUsr() {
+      const users=QLab.getUsers(), b=document.getElementById('usrBody');
+      b.innerHTML=users.map((u,i)=>`<tr><td>${u.username}</td><td>${u.name}</td><td>${u.role}</td><td class="admin-actions"><button class="btn btn-danger btn-sm" onclick="delUser(${i})">✕</button></td></tr>`).join('');
+    }
+
+    // ─── Add Handlers ───
+    document.getElementById('addAnn').addEventListener('click', () => {
+      const date=document.getElementById('annDate').value, text=document.getElementById('annText').value;
+      if(!date||!text) return; QLab.addItem('announcements',{date,text}); refreshAnn();
+      document.getElementById('annDate').value=''; document.getElementById('annText').value='';
+    });
+    document.getElementById('addMem').addEventListener('click', () => {
+      const name=document.getElementById('memName').value; if(!name) return;
+      QLab.addItem('members',{name,role:document.getElementById('memRole').value,category:document.getElementById('memCat').value,bio:document.getElementById('memBio').value,email:document.getElementById('memEmail').value,img:document.getElementById('memImg').value,title:document.getElementById('memRole').value});
+      refreshMem(); ['memName','memRole','memBio','memEmail','memImg'].forEach(id=>document.getElementById(id).value='');
+    });
+    document.getElementById('addCol').addEventListener('click', () => {
+      const name=document.getElementById('colName').value; if(!name) return;
+      QLab.addItem('collaborators',{name,affiliation:document.getElementById('colAff').value}); refreshCol();
+      document.getElementById('colName').value=''; document.getElementById('colAff').value='';
+    });
+    document.getElementById('addPub').addEventListener('click', () => {
+      const year=parseInt(document.getElementById('pubYear').value); if(!year) return;
+      QLab.addItem('publications',{year,authors:document.getElementById('pubAuth').value,title:document.getElementById('pubTitle').value,journal:document.getElementById('pubJournal').value,doi:document.getElementById('pubDoi').value||'#',pdf:document.getElementById('pubPdf').value||'#'});
+      refreshPub(); ['pubYear','pubAuth','pubTitle','pubJournal','pubDoi','pubPdf'].forEach(id=>document.getElementById(id).value='');
+    });
+    document.getElementById('addRes').addEventListener('click', () => {
+      const title=document.getElementById('resTitle').value; if(!title) return;
+      QLab.addItem('research',{title,img:document.getElementById('resImg').value,body:document.getElementById('resBody').value}); refreshRes();
+      ['resTitle','resImg','resBody'].forEach(id=>document.getElementById(id).value='');
+    });
+    document.getElementById('addIR').addEventListener('click', () => {
+      const name=document.getElementById('irName').value; if(!name) return;
+      QLab.addItem('internalResources',{name,url:document.getElementById('irUrl').value,category:document.getElementById('irCat').value,size:document.getElementById('irSize').value||'—',uploadedBy:'Admin',date:new Date().toISOString().split('T')[0]});
+      refreshIR(); ['irName','irUrl','irSize'].forEach(id=>document.getElementById(id).value='');
+    });
+    document.getElementById('addUsr').addEventListener('click', () => {
+      const username=document.getElementById('usrName').value; if(!username) return;
+      const users=QLab.getUsers();
+      users.push({username,password:document.getElementById('usrPass').value,name:document.getElementById('usrDisplay').value,role:document.getElementById('usrRole').value,avatar:document.getElementById('usrAvatar').value});
+      QLab.saveUsers(users); refreshUsr();
+      ['usrName','usrPass','usrDisplay','usrAvatar'].forEach(id=>document.getElementById(id).value='');
+    });
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      if(confirm('Reset ALL data to defaults? This cannot be undone.')) {
+        QLab.resetData(); localStorage.removeItem('qlab_users_v1');
+        document.getElementById('resetMsg').textContent='Data reset successfully.';
+        document.getElementById('resetMsg').className='form-msg success';
+        refreshAll();
+      }
+    });
+
+    // ─── Global delete helpers ───
+    window.delItem = (list, id) => { QLab.deleteItem(list, id); refreshAll(); };
+    window.delUser = (idx) => { const u=QLab.getUsers(); u.splice(idx,1); QLab.saveUsers(u); refreshUsr(); };
+
+    // ─── GitHub Integration ───
+    const ghMsg = document.getElementById('ghMsg');
+    // Restore token if already in session
+    if (typeof GitHubAPI !== 'undefined' && GitHubAPI.hasToken()) {
+      document.getElementById('ghToken').value = '••••••••••';
+      ghMsg.className='form-msg success'; ghMsg.textContent='Token loaded from session.';
+    }
+    document.getElementById('ghSave')?.addEventListener('click', async () => {
+      const token = document.getElementById('ghToken').value.trim();
+      if (!token || token === '••••••••••') { ghMsg.className='form-msg error'; ghMsg.textContent='Enter a valid token.'; return; }
+      GitHubAPI.setToken(token);
+      ghMsg.className='form-msg'; ghMsg.textContent='Verifying...';
+      const result = await GitHubAPI.verifyToken();
+      ghMsg.className = result.ok ? 'form-msg success' : 'form-msg error';
+      ghMsg.textContent = result.msg;
+      if (result.ok) document.getElementById('ghToken').value = '••••••••••';
+    });
+    document.getElementById('ghClear')?.addEventListener('click', () => {
+      GitHubAPI.clearToken(); document.getElementById('ghToken').value='';
+      ghMsg.className='form-msg success'; ghMsg.textContent='Token cleared.';
+    });
+    document.getElementById('ghUpload')?.addEventListener('click', async () => {
+      const upMsg = document.getElementById('ghUpMsg');
+      const file = document.getElementById('ghFile')?.files[0];
+      if (!file) { upMsg.className='form-msg error'; upMsg.textContent='Select a file first.'; return; }
+      if (!GitHubAPI.hasToken()) { upMsg.className='form-msg error'; upMsg.textContent='Set GitHub token first.'; return; }
+      try {
+        upMsg.className='form-msg'; upMsg.textContent='⏳ Uploading...';
+        const b64 = await GitHubAPI.fileToBase64(file);
+        const res = await GitHubAPI.uploadFile(file.name, b64);
+        upMsg.className='form-msg success'; upMsg.textContent='✅ Uploaded! URL: '+res.pagesUrl;
+        QLab.addItem('internalResources',{name:file.name,url:res.pagesUrl,category:'other',size:GitHubAPI.formatSize(file.size),uploadedBy:'Admin',date:new Date().toISOString().split('T')[0]});
+        refreshIR();
+      } catch(e) { upMsg.className='form-msg error'; upMsg.textContent='❌ '+e.message; }
+    });
+    document.getElementById('ghRefresh')?.addEventListener('click', async () => {
+      const list = document.getElementById('ghFileList');
+      list.textContent='Loading...';
+      const files = await GitHubAPI.listUploads();
+      if (files.length===0) { list.textContent='No files found in /uploads/.'; return; }
+      list.innerHTML=files.map(f=>`<div style="padding:.4rem 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center"><a href="${f.pagesUrl}" target="_blank">${f.name}</a> <span style="color:var(--text3);font-size:.8rem">${GitHubAPI.formatSize(f.size)}</span></div>`).join('');
+    });
+  });
+  </script>
+</body>
+</html>
