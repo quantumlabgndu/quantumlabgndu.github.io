@@ -189,10 +189,42 @@ const GitHubAPI = (() => {
     return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
   }
 
+  /* ── Helper: convert string to base64 (supports unicode) ── */
+  function stringToBase64(str) {
+    return btoa(unescape(encodeURIComponent(str)));
+  }
+
+  /* ── Update a specific file in the repo (like data.js) ── */
+  async function updateRepoFile(filePath, base64Content, commitMsg) {
+    const token = getToken();
+    if (!token) throw new Error('GitHub token not set.');
+
+    const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${filePath}`;
+    let sha = null;
+    try {
+      const check = await fetch(url, { headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json' } });
+      if (check.ok) { const existing = await check.json(); sha = existing.sha; }
+    } catch (e) {}
+
+    const body = { message: commitMsg, content: base64Content, branch: BRANCH };
+    if (sha) body.sha = sha;
+
+    const res = await fetch(url, {
+      method: 'PUT',
+      headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(`GitHub API error ${res.status}: ${err.message}`);
+    }
+    return await res.json();
+  }
+
   return {
     setToken, getToken, clearToken, hasToken,
     verifyToken, uploadFile, listUploads, deleteFile,
-    fileToBase64, formatSize,
+    updateRepoFile, fileToBase64, stringToBase64, formatSize,
     REPO_OWNER, REPO_NAME, UPLOAD_DIR
   };
 })();
