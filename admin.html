@@ -376,8 +376,8 @@
         btn.textContent = '⏳ Publishing...';
         btn.disabled = true;
 
-        // Fetch current data.js file
-        const res = await fetch('js/data.js');
+        // Fetch current data.js file (bypassing browser cache)
+        const res = await fetch('js/data.js?t=' + Date.now());
         if (!res.ok) throw new Error('Could not fetch data.js');
         let jsContent = await res.text();
 
