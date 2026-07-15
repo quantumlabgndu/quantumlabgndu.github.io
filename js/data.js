@@ -323,7 +323,7 @@ const QLab = (() => {
             "id": "m3",
             "name": "Rajdeep Singh",
             "role": "Ph.D. Candidate",
-            "title": "Ph.D. Scholar",
+            "title": "Ph.D. Candidate",
             "bio": "Focus: quantum sensing.",
             "email": "rajbeepphy.rsh@gndu.ac.in",
             "img": "pic/rajdeep.jpg",
