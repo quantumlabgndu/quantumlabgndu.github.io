@@ -548,6 +548,20 @@ const QLab = (() => {
         "name": "Abdul Baqi",
         "role": "admin",
         "avatar": "pic/Abdul.jpeg"
+    },
+    {
+        "username": "Ripdaman",
+        "password": "Ripdaman123",
+        "name": "Ripdaman Kaur",
+        "role": "member",
+        "avatar": "pic/Ribdaman2.jpeg"
+    },
+    {
+        "username": "Gaurisha Salwan",
+        "password": "Gaurisha123",
+        "name": "Gaurisha Salwan",
+        "role": "member",
+        "avatar": "pic/g.png"
     }
 ];
   // /* --- DATA END --- */
