@@ -506,6 +506,15 @@ const QLab = (() => {
             "uploadedBy": "Admin",
             "date": "2025-01-10",
             "size": "1.5 MB"
+        },
+        {
+            "name": "Spin Coater Python file",
+            "url": "https://quantumlabgndu.github.io/uploads/spin_coater_gui.py",
+            "category": "other",
+            "size": "31.4 KB",
+            "uploadedBy": "Abdul Baqi",
+            "date": "2026-07-16",
+            "id": "i1784192091234"
         }
     ]
 };
