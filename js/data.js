@@ -383,7 +383,7 @@ const QLab = (() => {
             "name": "Gurwinder Singh",
             "role": "PhD. Candidate",
             "category": "phd",
-            "bio": "Working on DFT and Quantum Sensing",
+            "bio": "Working on DFT and Quantum Sensing.",
             "email": "sursinghgurwinder@gmail.com",
             "img": "pic/Gurvinder.jpeg",
             "title": "PhD. Candidate",
