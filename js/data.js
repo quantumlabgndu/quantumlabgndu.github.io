@@ -380,12 +380,12 @@ const QLab = (() => {
             "id": "m1784112504175"
         },
         {
-            "name": "Gurinder",
+            "name": "Gurwinder Singh",
             "role": "PhD. Candidate",
             "category": "phd",
-            "bio": "",
-            "email": "",
-            "img": "",
+            "bio": "Working on DFT and Quantum Sensing",
+            "email": "sursinghgurwinder@gmail.com",
+            "img": "pic/Gurvinder.jpeg",
             "title": "PhD. Candidate",
             "id": "m1784112662157"
         }
