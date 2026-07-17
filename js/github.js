@@ -5,7 +5,7 @@
    ═══════════════════════════════════════════════════════════════ */
 
 const GitHubAPI = (() => {
-  const PAT_TOKEN = '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';
+  const PAT_TOKEN = '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';
   const REPO_OWNER = 'quantumlabgndu';        // ← your GitHub username/org
   const REPO_NAME = 'quantumlabgndu.github.io'; // ← your repo name
   const BRANCH = 'main';
