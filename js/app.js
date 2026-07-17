@@ -337,7 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
           upMsg.className = 'form-msg'; upMsg.textContent = '⏳ Uploading to GitHub...';
           const base64 = await GitHubAPI.fileToBase64(file);
           const result = await GitHubAPI.uploadFile(file.name, base64);
-          // Save to localStorage too
+          // Save to memory too
           const sess = QLab.getMemberSession();
           QLab.addItem('internalResources', {
             name: file.name,
