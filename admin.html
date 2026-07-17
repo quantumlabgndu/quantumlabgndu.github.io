@@ -148,7 +148,7 @@
       <!-- GitHub Tab -->
       <div class="admin-tab" id="tab-github" style="display:none">
         <h2>🐙 GitHub Integration</h2>
-        <div class="card" style="padding:2rem;max-width:600px;margin-bottom:1.5rem">
+        <div class="card" style="padding:2rem;max-width:600px;margin-bottom:1.5rem;display:none;">
           <h3 style="margin-bottom:1rem">GitHub Personal Access Token</h3>
           <p style="color:var(--text2);font-size:.85rem;margin-bottom:1rem">Paste your GitHub PAT to enable file uploads directly to your repo. The token is stored <strong>only in session memory</strong> — it is never saved to disk or committed to code.</p>
           <div class="form-group"><label>Token</label><input type="password" class="form-input" id="ghToken" placeholder="ghp_xxxxxxxxxx..."></div>
@@ -176,7 +176,7 @@
         <h2>⚙ Settings</h2>
         <div class="card" style="padding:2rem;max-width:500px">
           <p style="color:var(--text2);margin-bottom:1rem">Admin credentials: <strong>admin</strong> / <strong>quantumlab2025</strong></p>
-          <p style="color:var(--text2);margin-bottom:1.5rem">All data is stored in your browser's localStorage. To reset to defaults:</p>
+          <p style="color:var(--text2);margin-bottom:1.5rem">All edits are stored temporarily in memory. Publish to save permanently.</p>
           <button class="btn btn-danger btn-sm" id="resetBtn">⚠ Reset All Data to Defaults</button>
           <p class="form-msg" id="resetMsg" style="margin-top:1rem"></p>
         </div>
@@ -309,7 +309,7 @@
     });
     document.getElementById('resetBtn').addEventListener('click', () => {
       if(confirm('Reset ALL data to defaults? This cannot be undone.')) {
-        QLab.resetData(); localStorage.removeItem('qlab_users_v1');
+        QLab.resetData();
         document.getElementById('resetMsg').textContent='Data reset successfully.';
         document.getElementById('resetMsg').className='form-msg success';
         refreshAll();
@@ -325,7 +325,7 @@
     // Restore token if already in session
     if (typeof GitHubAPI !== 'undefined' && GitHubAPI.hasToken()) {
       document.getElementById('ghToken').value = '••••••••••';
-      ghMsg.className='form-msg success'; ghMsg.textContent='Token loaded from session.';
+      ghMsg.className='form-msg success'; ghMsg.textContent='Token loaded from configuration.';
     }
     document.getElementById('ghSave')?.addEventListener('click', async () => {
       const token = document.getElementById('ghToken').value.trim();
