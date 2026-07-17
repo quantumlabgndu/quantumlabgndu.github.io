@@ -5,27 +5,27 @@
    ═══════════════════════════════════════════════════════════════ */
 
 const GitHubAPI = (() => {
-  const TOKEN_KEY = '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';
+  const PAT_TOKEN = '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';
   const REPO_OWNER = 'quantumlabgndu';        // ← your GitHub username/org
   const REPO_NAME = 'quantumlabgndu.github.io'; // ← your repo name
   const BRANCH = 'main';
   const UPLOAD_DIR = 'uploads';                // folder in repo for uploads
 
-  /* ── Token management (sessionStorage only) ── */
+  /* ── Token management (Hardcoded) ── */
   function setToken(token) {
-    sessionStorage.setItem(TOKEN_KEY, token.trim());
+    // Hardcoded
   }
 
   function getToken() {
-    return sessionStorage.getItem(TOKEN_KEY) || '';
+    return PAT_TOKEN;
   }
 
   function clearToken() {
-    sessionStorage.removeItem(TOKEN_KEY);
+    // Hardcoded
   }
 
   function hasToken() {
-    return !!getToken();
+    return true;
   }
 
   /* ── Verify token works ── */
