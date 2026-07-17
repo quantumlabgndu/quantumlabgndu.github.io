@@ -115,19 +115,24 @@ const QLab = (() => {
     ],
 
     members: [
-      { id:'m1', name:'Dr. Harpreet Singh', role:'Principal Investigator', title:'Assistant Professor of Physics', bio:'Leads the Quantum Lab at GNDU.', email:'harpreet.phy@gndu.ac.in', img:'pic/harpreets.png', category:'pi' },
-      { id:'m2', name:'Sumit Choudhary', role:'Ph.D. Candidate', title:'Ph.D. Scholar', bio:'Quantum sensing and computation.', email:'sumitphy.rsh@gndu.ac.in', img:'pic/sumit.png', category:'phd' },
-      { id:'m3', name:'Rajdeep Singh', role:'Ph.D. Candidate', title:'Ph.D. Scholar', bio:'Focus: quantum sensing.', email:'rajbeepphy.rsh@gndu.ac.in', img:'pic/rajdeep.jpg', category:'phd' },
-      { id:'m4', name:'Abdul Baqi', role:'MSc (FYIP) Student', title:'Undergraduate', bio:'Interests: quantum physics and physics education.', email:'abdulphy.std@gndu.ac.in', img:'pic/Abdul.jpeg', category:'undergrad' },
-      { id:'m5', name:'Akansha', role:'Graduate, 2025', title:'Alumni', bio:'', email:'', img:'pic/akansha.png', category:'alumni' }
+      { id: "m1", name: "Dr. Harpreet Singh", role: "Principal Investigator", title: "Assistant Professor of Physics", bio: "Leads the Quantum Lab at GNDU.", email: "harpreet.phy@gndu.ac.in", img: "pic/harpreets.png", category: "pi" },
+      { id: "m2", name: "Sumit Choudhary", role: "Ph.D. Candidate", title: "Ph.D. Candidate", bio: "Quantum Computing and Quantum Sensing", email: "sumitphy.rsh@gndu.ac.in", img: "pic/sumit.png", category: "phd" },
+      { id: "m3", name: "Rajdeep Singh", role: "Ph.D. Candidate", title: "Ph.D. Candidate", bio: "Focus: quantum sensing.", email: "rajbeepphy.rsh@gndu.ac.in", img: "pic/rajdeep.jpg", category: "phd" },
+      { id: "m4", name: "Abdul Baqi", role: "MSc (FYIP) Student", title: "MSc (FYIP) Student", bio: "Interests: quantum physics and physics education.", email: "abdul.baqi.qadian@gmail.com", img: "pic/Abdul.jpeg", category: "grad" },
+      { id: "m5", name: "Akansha", role: "Graduate, 2025", title: "Graduate, 2025", bio: "Pursuing PhD from NIT Jalandhar", email: "", img: "pic/akansha.png", category: "alumni" },
+      { id: "m1784111965419", name: "Ripdaman Kaur", role: "Ph.D. Candidate", title: "Ph.D. Candidate", bio: "Currently working in quantum sensing using silicon carbide (SiC) and nitrogen-vacancy (NV) centers in diamond", email: "ripdamanphy.rsh@gndu.ac.in", img: "pic/Ribdaman2.jpeg", category: "phd" },
+      { id: "m1784112243801", name: "Gaurisha Salwan", role: "PhD. Candidate", title: "PhD. Candidate", bio: "Gaurisha Salwan is a research student working in quantum sensing, with interests in experimental physics and advanced scientific instrumentation.", email: "gaurishaphy.rsh@gndu.ac.in", img: "pic/g.png", category: "phd" },
+      { id: "m1784112504175", name: "Chetan Dhawan", role: "MSc FYIP 3rd Sem Student", title: "MSc FYIP 3rd Sem Student", bio: "Interests in Quantum Computation", email: "chetandhawanphysics@gmail.com", img: "pic/chetan.jpeg", category: "undergrad" },
+      { id: "m1784112662157", name: "Gurwinder Singh", role: "PhD. Candidate", title: "PhD. Candidate", bio: "Working on DFT and Quantum Sensing.", email: "sursinghgurwinder@gmail.com", img: "pic/Gurvinder.jpeg", category: "phd" }
     ],
 
     collaborators: [
-      { id:'c1', name:'Prof. Kavita Dorai', affiliation:'IISER Mohali', url:'' },
-      { id:'c2', name:'Prof. Arvind', affiliation:'IISER Mohali', url:'' },
-      { id:'c3', name:'Dr. Harjit Kaur', affiliation:'Department of Physics, GNDU, Amritsar', url:'' },
-      { id:'c4', name:'Dr. Hardeep Kaur', affiliation:'Department of Chemistry, Khalsa College, Amritsar', url:'' },
-      { id:'c5', name:'Dr. Tarunpreet Kaur', affiliation:'Khalsa College of Engineering, Amritsar', url:'' }
+      { id: "c1", name: "Prof. Kavita Dorai", affiliation: "IISER Mohali", url: "" },
+      { id: "c2", name: "Prof. Arvind", affiliation: "IISER Mohali", url: "" },
+      { id: "c3", name: "Dr. Harjit Kaur", affiliation: "Department of Physics, GNDU, Amritsar", url: "" },
+      { id: "c4", name: "Dr. Hardeep Kaur", affiliation: "Department of Chemistry, Khalsa College, Amritsar", url: "" },
+      { id: "c5", name: "Dr. Tarunpreet Kaur", affiliation: "Khalsa College of Engineering, Amritsar", url: "" },
+      { id: "c1784110615099", name: "Prof Baljinder Singh", affiliation: "Central University Punjab", url: "" }
     ],
 
     announcements: [
@@ -157,10 +162,12 @@ const QLab = (() => {
 
   /* ── Default users for internal login ── */
   const DEFAULT_USERS = [
-    { username: 'harpreet', password: 'quantum2025', name: 'Dr. Harpreet Singh', role: 'admin', avatar: 'pic/harpreets.png' },
-    { username: 'sumit', password: 'sumit123', name: 'Sumit Choudhary', role: 'member', avatar: 'pic/sumit.png' },
-    { username: 'rajdeep', password: 'rajdeep123', name: 'Rajdeep Singh', role: 'member', avatar: 'pic/rajdeep.jpg' },
-    { username: 'abdul', password: 'abdul123', name: 'Abdul Baqi', role: 'member', avatar: 'pic/Abdul.jpeg' }
+    { username: "harpreet", password: "quantum2025", name: "Dr. Harpreet Singh", role: "admin", avatar: "pic/harpreets.png" },
+    { username: "sumit", password: "sumit123", name: "Sumit Choudhary", role: "member", avatar: "pic/Sumit.jpeg" },
+    { username: "rajdeep", password: "rajdeep123", name: "Rajdeep Singh", role: "member", avatar: "pic/rajdeep.jpg" },
+    { username: "abdul", password: "abdul123", name: "Abdul Baqi", role: "admin", avatar: "pic/Abdul.jpeg" },
+    { username: "Ripdaman", password: "Ripdaman123", name: "Ripdaman Kaur", role: "member", avatar: "pic/Ribdaman2.jpeg" },
+    { username: "Gaurisha Salwan", password: "Gaurisha123", name: "Gaurisha Salwan", role: "member", avatar: "pic/g.png" }
   ];
   // /* --- DATA END --- */
 
