@@ -543,14 +543,14 @@ const QLab = (() => {
     },
     {
         "username": "ripdaman",
-        "password": "Ripdaman123",
+        "password": "ripdaman123",
         "name": "Ripdaman Kaur",
         "role": "member",
         "avatar": "pic/Ribdaman2.jpeg"
     },
     {
         "username": "gaurisha Salwan",
-        "password": "Gaurisha123",
+        "password": "gaurisha123",
         "name": "Gaurisha Salwan",
         "role": "member",
         "avatar": "pic/g.png"
