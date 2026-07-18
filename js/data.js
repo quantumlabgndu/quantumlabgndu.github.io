@@ -456,57 +456,12 @@ const QLab = (() => {
     "internalResources": [
         {
             "id": "ir1",
-            "name": "NV_ODMR_Controller.pdf",
-            "url": "manuals/NV_ODMR_Controller.pdf",
-            "category": "manuals",
-            "uploadedBy": "Admin",
-            "date": "2025-01-10",
-            "size": "2.4 MB"
-        },
-        {
-            "id": "ir2",
-            "name": "FPGA_Pulse_Generator.pdf",
-            "url": "manuals/FPGA_Pulse_Generator.pdf",
-            "category": "manuals",
-            "uploadedBy": "Admin",
-            "date": "2025-01-10",
-            "size": "1.8 MB"
-        },
-        {
-            "id": "ir3",
-            "name": "RF_Switch_Matrix.pdf",
-            "url": "manuals/RF_Switch_Matrix.pdf",
-            "category": "manuals",
-            "uploadedBy": "Admin",
-            "date": "2025-01-10",
-            "size": "3.1 MB"
-        },
-        {
-            "id": "ir4",
-            "name": "Compact_ODMR_Head.pdf",
-            "url": "manuals/Compact_ODMR_Head.pdf",
-            "category": "manuals",
-            "uploadedBy": "Admin",
-            "date": "2025-01-10",
-            "size": "1.2 MB"
-        },
-        {
-            "id": "ir5",
-            "name": "Lock_in_Amplifier.pdf",
-            "url": "manuals/Lock_in_Amplifier.pdf",
-            "category": "manuals",
-            "uploadedBy": "Admin",
-            "date": "2025-01-10",
-            "size": "2.0 MB"
-        },
-        {
-            "id": "ir6",
-            "name": "Microwave_Source_Synthesizer.pdf",
-            "url": "manuals/Microwave_Source_Synthesizer.pdf",
-            "category": "manuals",
-            "uploadedBy": "Admin",
-            "date": "2025-01-10",
-            "size": "1.5 MB"
+            "name": "Spin Coater",
+            "url": "uploads/Spin Coater All Files.rar",
+            "category": "Code",
+            "uploadedBy": "abdul",
+            "date": "2025-07-19",
+            "size": "42.5 KB"
         }
     ]
 };
