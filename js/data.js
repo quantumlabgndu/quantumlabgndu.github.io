@@ -462,6 +462,15 @@ const QLab = (() => {
             "uploadedBy": "abdul",
             "date": "2025-07-19",
             "size": "42.5 KB"
+        },
+        {
+            "name": "3d Printer Ref",
+            "url": "https://quantumlabgndu.github.io/uploads/3D printer Ref.pdf",
+            "category": "other",
+            "size": "21 MB",
+            "uploadedBy": "Admin",
+            "date": "2026-07-21",
+            "id": "i1784636833217"
         }
     ]
 };
