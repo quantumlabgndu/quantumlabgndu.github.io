@@ -227,28 +227,19 @@
     <button id="clearCacheBtn" style="margin-top:.75rem;background:rgba(124,58,237,.15);color:var(--accent1);border:1px solid rgba(124,58,237,.3);padding:.35rem .9rem;border-radius:6px;font-size:.78rem;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(124,58,237,.3)'" onmouseout="this.style.background='rgba(124,58,237,.15)'">🔄 Clear Cache & Reload</button>
   </footer>
 
-  <script>
-    // Dynamic cache-busting: append current hour so files refresh at most every hour
-    const _v = new Date().toISOString().slice(0,13).replace(/[-T:]/g,'');
-    ['js/data.js','js/github.js','js/app.js'].forEach(src => {
-      const s = document.createElement('script');
-      s.src = src + '?v=' + _v;
-      s.async = false; // preserve execution order
-      document.body.appendChild(s);
-    });
-  </script>
+  <script src="js/data.js?v=20260722"></script>
+  <script src="js/github.js?v=20260722"></script>
+  <script src="js/app.js?v=20260722"></script>
   <script>
     // Clear Cache button handler
     document.addEventListener('DOMContentLoaded', () => {
       const ccBtn = document.getElementById('clearCacheBtn');
       if (ccBtn) {
         ccBtn.addEventListener('click', async () => {
-          // Clear all caches (Service Worker, etc.)
           if ('caches' in window) {
             const names = await caches.keys();
             await Promise.all(names.map(n => caches.delete(n)));
           }
-          // Force hard reload bypassing browser cache
           location.reload(true);
         });
       }
