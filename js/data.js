@@ -337,7 +337,7 @@ const QLab = (() => {
             "name": "Abdul Baqi",
             "role": "MSc (FYIP) Student",
             "title": "MSc (FYIP) Student",
-            "bio": "Interests: quantum physics and physics education.",
+            "bio": "Interests: quantum physics & physics education.",
             "email": "abdul.baqi.qadian@gmail.com",
             "img": "pic/Abdul.jpeg",
             "category": "grad"
