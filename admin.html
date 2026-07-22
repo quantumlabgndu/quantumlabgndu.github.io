@@ -187,15 +187,8 @@
     </main>
   </div>
 
-  <script>
-    const _v = new Date().toISOString().slice(0,13).replace(/[-T:]/g,'');
-    ['js/data.js','js/github.js'].forEach(src => {
-      const s = document.createElement('script');
-      s.src = src + '?v=' + _v;
-      s.async = false;
-      document.body.appendChild(s);
-    });
-  </script>
+  <script src="js/data.js?v=20260722"></script>
+  <script src="js/github.js?v=20260722"></script>
   <script>
   document.addEventListener('DOMContentLoaded', () => {
     const gate = document.getElementById('adminGate');
@@ -408,9 +401,20 @@
                              newDataStr + 
                              jsContent.substring(endIdx);
 
-        // Upload to repo
+        // Upload data.js to repo
         const base64 = GitHubAPI.stringToBase64(newJsContent);
         await GitHubAPI.updateRepoFile('js/data.js', base64, 'Published new CMS data via Admin Panel');
+
+        // Also update cache-busting version in index.html so visitors get fresh files
+        try {
+          const newVer = Date.now();
+          const idxRes = await fetch('index.html?t=' + newVer);
+          if (idxRes.ok) {
+            let idxContent = await idxRes.text();
+            idxContent = idxContent.replace(/\?v=\d+/g, '?v=' + newVer);
+            await GitHubAPI.updateRepoFile('index.html', GitHubAPI.stringToBase64(idxContent), 'Bump cache version');
+          }
+        } catch(e) { console.warn('Could not update index.html version:', e); }
         
         btn.textContent = '✅ Published!';
         btn.classList.replace('btn-success', 'btn-primary');
