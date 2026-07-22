@@ -316,7 +316,35 @@ document.addEventListener('DOMContentLoaded', () => {
   const uploadModal = document.getElementById('uploadModal');
   const modalClose = document.getElementById('modalClose');
   const wsUploadBtn = document.getElementById('wsUploadBtn');
-  if (wsUploadBtn) wsUploadBtn.addEventListener('click', () => uploadModal.classList.add('show'));
+
+  // ── Token status helper (for the upload modal) ──
+  function refreshTokenStatus() {
+    const status = document.getElementById('upTokenStatus');
+    const tokenInput = document.getElementById('upToken');
+    if (!status) return;
+    if (typeof GitHubAPI !== 'undefined' && GitHubAPI.hasToken()) {
+      status.textContent = '✅ Token saved';
+      status.style.color = 'var(--success, #22c55e)';
+      if (tokenInput) tokenInput.value = '••••••••••';
+    } else {
+      status.textContent = '⚠ Not set';
+      status.style.color = 'var(--warning, #f59e0b)';
+      if (tokenInput) tokenInput.value = '';
+    }
+  }
+
+  // Save token from upload modal
+  const upTokenSave = document.getElementById('upTokenSave');
+  if (upTokenSave) {
+    upTokenSave.addEventListener('click', () => {
+      const val = document.getElementById('upToken').value.trim();
+      if (!val || val === '••••••••••') return;
+      GitHubAPI.setToken(val);
+      refreshTokenStatus();
+    });
+  }
+
+  if (wsUploadBtn) wsUploadBtn.addEventListener('click', () => { refreshTokenStatus(); uploadModal.classList.add('show'); });
   if (modalClose) modalClose.addEventListener('click', () => uploadModal.classList.remove('show'));
   uploadModal?.addEventListener('click', e => { if (e.target === uploadModal) uploadModal.classList.remove('show'); });
 
@@ -337,7 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
           upMsg.className = 'form-msg'; upMsg.textContent = '⏳ Uploading to GitHub...';
           const base64 = await GitHubAPI.fileToBase64(file);
           const result = await GitHubAPI.uploadFile(file.name, base64);
-          // Save to memory too
+          // Save to localStorage too
           const sess = QLab.getMemberSession();
           QLab.addItem('internalResources', {
             name: file.name,
@@ -354,17 +382,9 @@ document.addEventListener('DOMContentLoaded', () => {
           upMsg.className = 'form-msg error'; upMsg.textContent = '❌ ' + err.message;
         } finally { upBtn.disabled = false; }
       } else {
-        // Fallback: just save metadata locally
-        const sess = QLab.getMemberSession();
-        QLab.addItem('internalResources', {
-          name: file.name, url: '#', category: document.getElementById('upCat').value,
-          size: (file.size / (1024*1024)).toFixed(1) + ' MB',
-          uploadedBy: sess ? sess.name : 'Unknown',
-          date: new Date().toISOString().split('T')[0]
-        });
-        upMsg.className = 'form-msg success'; upMsg.textContent = 'Saved locally (set GitHub token in Admin for cloud upload).';
-        setTimeout(() => { uploadForm.reset(); uploadModal.classList.remove('show'); upMsg.textContent=''; }, 2000);
-        renderResources();
+        // No token — prompt user to enter one above
+        upMsg.className = 'form-msg error';
+        upMsg.textContent = 'Please enter a GitHub Token above to enable uploads.';
       }
     });
   }
