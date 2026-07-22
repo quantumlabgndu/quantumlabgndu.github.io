@@ -5,33 +5,27 @@
    ═══════════════════════════════════════════════════════════════ */
 
 const GitHubAPI = (() => {
-  // We split the token into parts so GitHub's automated security scanners don't 
-  // instantly detect and revoke it when pushed to a public repository.
-  // WARNING: This is NOT secure against humans. Anyone can find this in your code.
-  const T1 = 'github_pat_';
-  const T2 = '11BYTZ2SQ0oHN9jan7GCgq_';
-  const T3 = 'XOeaawRaeLmHf6h6c1wJx4XGPcLxcJ7wvtULYaaWBPhM2PQEKB6sZWz5q6s';
-
   const REPO_OWNER = 'quantumlabgndu';        // ← your GitHub username/org
   const REPO_NAME = 'quantumlabgndu.github.io'; // ← your repo name
   const BRANCH = 'main';
   const UPLOAD_DIR = 'uploads';                // folder in repo for uploads
+  const TOKEN_KEY = 'qlab_gh_token';           // localStorage key for PAT
 
-  /* ── Token management (Hardcoded & Obfuscated) ── */
+  /* ── Token management (localStorage-backed, user-provided) ── */
   function setToken(token) {
-    // No-op
+    localStorage.setItem(TOKEN_KEY, token);
   }
 
   function getToken() {
-    return T1 + T2 + T3;
+    return localStorage.getItem(TOKEN_KEY) || '';
   }
 
   function clearToken() {
-    // No-op
+    localStorage.removeItem(TOKEN_KEY);
   }
 
   function hasToken() {
-    return true;
+    return !!getToken();
   }
 
   /* ── Verify token works ── */
