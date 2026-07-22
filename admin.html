@@ -4,8 +4,11 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Admin Panel — Quantum Lab</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=3">
   <link rel="icon" href="pic/favicon.png">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
 </head>
 <body>
   <!-- Admin Login -->
@@ -148,7 +151,7 @@
       <!-- GitHub Tab -->
       <div class="admin-tab" id="tab-github" style="display:none">
         <h2>🐙 GitHub Integration</h2>
-        <div class="card" style="padding:2rem;max-width:600px;margin-bottom:1.5rem;display:none;">
+        <div class="card" style="padding:2rem;max-width:600px;margin-bottom:1.5rem">
           <h3 style="margin-bottom:1rem">GitHub Personal Access Token</h3>
           <p style="color:var(--text2);font-size:.85rem;margin-bottom:1rem">Paste your GitHub PAT to enable file uploads directly to your repo. The token is stored <strong>only securely in your local browser storage</strong> — it is never saved to disk or committed to code.</p>
           <div class="form-group"><label>Token</label><input type="password" class="form-input" id="ghToken" placeholder="ghp_xxxxxxxxxx..."></div>
@@ -184,8 +187,15 @@
     </main>
   </div>
 
-  <script src="js/data.js"></script>
-  <script src="js/github.js"></script>
+  <script>
+    const _v = new Date().toISOString().slice(0,13).replace(/[-T:]/g,'');
+    ['js/data.js','js/github.js'].forEach(src => {
+      const s = document.createElement('script');
+      s.src = src + '?v=' + _v;
+      s.async = false;
+      document.body.appendChild(s);
+    });
+  </script>
   <script>
   document.addEventListener('DOMContentLoaded', () => {
     const gate = document.getElementById('adminGate');
